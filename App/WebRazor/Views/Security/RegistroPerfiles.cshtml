@@ -1,0 +1,39 @@
+﻿@using Gbso.App.Entities
+@model ProfileEntity
+@{ViewBag.Title = "Security";}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+@using (Html.BeginForm("RegistroPerfiles", "Security", FormMethod.Post))
+{
+    @Html.LabelFor(m => m.Description) @Html.TextBoxFor(m => m.Description) <br />
+    @Html.LabelFor(m => m.State) @Html.TextBoxFor(m => m.State) <br />
+    <button type="submit">Registrar</button>
+}
+@{
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.LabelFor(m => m.Key)</th>
+                <th>@Html.LabelFor(m => m.Description)</th>
+                <th>@Html.LabelFor(m => m.ActionState)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (ViewBag.PerfilesCargados != null)
+                {
+                    foreach (var Perfil in ViewBag.PerfilesCargados as ProfilesCollection)
+                    {
+                        <tr>
+                            <td>@Perfil.Key</td>
+                            <td>@Perfil.Description</td>
+                            <td>@Perfil.ActionState</td>
+                        </tr>
+                    }
+                    @Html.ActionLink("Registrar Perfiles", "RegistrarPerfiles", "Security", FormMethod.Post)
+                }
+            }
+        </tbody>
+    </table>
+}

@@ -19,6 +19,9 @@ namespace WebRazor
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Gbso.App.Business.Confi.DefoultSqlConnectionName = "GbsoAppDb";
+            Gbso.App.Business.Confi.Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
