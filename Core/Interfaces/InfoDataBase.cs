@@ -37,20 +37,16 @@ namespace Gbso.Core
 
     public class EntityDatabaseReferences : Attribute
     {
-        public string SqlSchemaTable { get; set; }
         public string SqlTable { get; set; }
         public string SqlStoredProcedure { get; set; }
-        public string SqlSchemaStoredProcedure { get; set; }
         /// <summary>
         /// Inicializa la descripción de una clase con referencia a la lógica en baase de datos
         /// </summary>
         /// <param name="SqlTable">Indica el nombre de la tabla en base de datos asociada a la clase</param>
         /// <param name="SqlStoredProcedure">Indica el nombre del procedimiento almacenado asociado a la clase</param>
-        public EntityDatabaseReferences(string SqlSchemaTable, string SqlTable, string SqlSchemaStoredProcedure, string SqlStoredProcedure)
+        public EntityDatabaseReferences(string SqlTable, string SqlStoredProcedure)
         {
-            this.SqlSchemaTable = SqlSchemaTable;
             this.SqlTable = SqlTable;
-            this.SqlSchemaStoredProcedure = SqlSchemaStoredProcedure;
             this.SqlStoredProcedure = SqlStoredProcedure;
         }
         

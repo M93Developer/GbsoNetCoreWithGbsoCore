@@ -10,6 +10,7 @@ namespace Gbso.App.Entities
     /// Entidad Maestra para las aplicaciones con base de datos
     /// </summary>
     /// <typeparam name="TypeKey">Define el tipo de dato de la llave primaria</typeparam>
+    [Serializable]
     public class AppEntityMaster<TKey> : EntityMaster<TKey> 
     {
         [InfoDataBase("IpLastChange")]

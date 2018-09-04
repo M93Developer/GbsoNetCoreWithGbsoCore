@@ -107,10 +107,10 @@ namespace Gbso.App.Business
         }
 
         /// <summary>
-        /// Registra un perfil
+        /// Registra multiples perfiles
         /// </summary>
-        /// <param name="profiles">Perfil a registrar</param>
-        /// <returns>retorna el identificador asignado al perfil registrado</returns>
+        /// <param name="profiles">Perfiles a registrar</param>
+        /// <returns>retorna el número de perfiles registrados</returns>
         public int? RegisterProfiles(ProfilesCollection profiles)
         {
             return new ProfileData(SqlConnection).UpdateCollection(profiles.Where(n => n.ActionState == Core.Entities.ActionStateEnum.Created) as ProfilesCollection).Registered;

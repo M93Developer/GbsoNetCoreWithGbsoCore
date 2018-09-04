@@ -1,10 +1,12 @@
 ﻿using Gbso.Core;
 using Gbso.Core.Entities;
 using Gbso.Core.Enum;
+using System;
 
 namespace Gbso.App.Entities
 {
-    [EntityDatabaseReferences("Security", "User", "Security", "Stp_User")]
+    [Serializable]
+    [EntityDatabaseReferences("User", "Stp_User")]
     public class UserEntity : AppEntityMaster<int?>
     {
         [InfoDataBase("Nikname", SqlTypesColumn.Default, true)]
@@ -14,6 +16,7 @@ namespace Gbso.App.Entities
         [InfoDataBase("Key_Perfil", SqlTypesColumn.ForeignKey,false, new string[2] { "Security", "Perfil" })]
         public ProfileEntity Perfil { get; set; }
     }
+    [Serializable]
     public class UsersCollection : CollectionMaster<UserEntity, int?>
     {
 

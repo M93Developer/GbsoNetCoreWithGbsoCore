@@ -4,42 +4,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Gbso.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 namespace Gbso.App.Web.Controllers
 {
-    public class SecurityController : Controller
+    public class SecurityController : Core.Mvc.Controller
     {
+        public ProfilesCollection PerfilesRegistrar {
+            get {
+                get { return (ProfilesCollection)(SessionVewState["RegistrarPerfil-Perfiles"] ?? (SessionVewState["RegistrarPerfil-Perfiles"] = new ProfilesCollection())); }
+            }
+            set { SessionVewState["RegistrarPerfil-Perfiles"] = value; }
+        }
 
         public ActionResult Index()
         {
             ViewBag.Message = "Este es el módulo de seguridad";
             return View();
-        }
-
-        public ProfilesCollection PerfilesCargados {
-            get {
-                return (Session["SecurityController-PerfilesCargados"] as ProfilesCollection) ?? ((Session["SecurityController-PerfilesCargados"] = new ProfilesCollection()) as ProfilesCollection);
-            }
-            set {
-                Session["SecurityController-PerfilesCargados"] = value;
-            }
+            
         }
 
         public ActionResult RegistroPerfiles()
         {
             ViewBag.Message = "Cargué los perfiles a registrar";
-            ViewBag.PerfilesCargados = PerfilesCargados;
+            ViewBag.PerfilesCargados = PerfilesRegistrar;
             return View(new ProfileEntity());
         }
 
         [HttpPost]
         public ActionResult RegistroPerfiles(ProfileEntity perfil)
         {
-            PerfilesCargados.Create(perfil);
-            ViewBag.PerfilesCargados = PerfilesCargados;
+            PerfilesRegistrar.Create(perfil);
+            ViewBag.PerfilesCargados = PerfilesRegistrar;
             return View(new ProfileEntity());
         }
 
@@ -48,7 +45,7 @@ namespace Gbso.App.Web.Controllers
         {
             using (var business = new SecurityBusiness())
             {
-                ViewBag.Message = string.Format("Se registraron {0} perfiles", business.RegisterProfiles(PerfilesCargados));
+                ViewBag.Message = string.Format("Se registraron {0} perfiles", business.RegisterProfiles(PerfilesRegistrar));
             }
             return View(new ProfileEntity());
         }
@@ -65,8 +62,7 @@ namespace Gbso.App.Web.Controllers
 
         public ActionResult RegistrarPerfil()
         {
-            if (Session["RegistrarPerfil-Perfiles"] == null) Session["RegistrarPerfil-Perfiles"] = new ProfilesCollection();
-            ViewBag.Perfiles = Session["RegistrarPerfil-Perfiles"];
+            ViewBag.Perfiles = PerfilesRegistrar;
             ViewBag.Message = "Registre los perfiles";
             return View(new ProfileEntity());
         }
@@ -74,8 +70,7 @@ namespace Gbso.App.Web.Controllers
         [HttpPost]
         public ActionResult RegistrarPerfil(ProfileEntity perfil)
         {
-            ((ProfilesCollection) (HttpContext.Session.Get(""))).Add(perfil);
-            ViewBag.Perfiles = Session["RegistrarPerfil-Perfiles"];
+            ViewBag.Perfiles = PerfilesRegistrar;
             ViewBag.Message = "Perfil registrado con éxito";
             return View(perfil);
         }

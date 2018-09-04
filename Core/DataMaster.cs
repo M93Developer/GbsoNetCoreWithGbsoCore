@@ -33,7 +33,7 @@ namespace Gbso.Core
             if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
             var entityDescriptionAttributes = (EntityDatabaseReferences)typeof(TEntity).GetCustomAttribute(typeof(EntityDatabaseReferences));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = string.Format("{0}.{1}", entityDescriptionAttributes.SqlSchemaStoredProcedure, entityDescriptionAttributes.SqlStoredProcedure);
+            SqlString = entityDescriptionAttributes.SqlStoredProcedure;
         }
         /// <summary>
         /// Constructor de la clase que recive una conexión
@@ -45,7 +45,7 @@ namespace Gbso.Core
             if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
             var entityDescriptionAttributes = (EntityDatabaseReferences)typeof(TEntity).GetCustomAttribute(typeof(EntityDatabaseReferences));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = string.Format("{0}.{1}", entityDescriptionAttributes.SqlSchemaStoredProcedure, entityDescriptionAttributes.SqlStoredProcedure);
+            SqlString = entityDescriptionAttributes.SqlStoredProcedure;
         }
 
         /// <summary>

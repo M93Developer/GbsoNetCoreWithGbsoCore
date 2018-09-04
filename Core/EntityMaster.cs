@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Gbso.Core.Entities
     /// Entidad Maestra
     /// </summary>
     /// <typeparam name="TypeKey">Recibe el tipo de la llave primaria</typeparam>
+    [Serializable]
     public class EntityMaster<TKey> :IEntityMaster, IComparable<EntityMaster<TKey>>, IEquatable<EntityMaster<TKey>>, ICloneable
     {
         [InfoDataBase("Key", SqlTypesColumn.PrimaryKey)]

@@ -38,8 +38,15 @@ namespace WebRazor
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
             services.AddMvc();
+            //Se agrega el servicio de sesions
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Gbso.App.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +66,9 @@ namespace WebRazor
             app.UseStaticFiles();
 
             app.UseAuthentication();
+            app.UseCookiePolicy();
+            //Nesesario para el uso de sesiones
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

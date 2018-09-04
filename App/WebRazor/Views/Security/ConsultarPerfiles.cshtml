@@ -8,12 +8,10 @@
 
 <br />
 @{
-    foreach (PerfilEntity item in @ViewBag.Perfils)
+    foreach (ProfileEntity item in @ViewBag.Perfils)
     {
         <h6>@item.Key - @item.Description - @item.ActionState - @item.UserLastChange.Perfil.Description</h6>
     }
-
-
 }
 
 

@@ -310,6 +310,7 @@ namespace Gbso.Core.Entities
     //    #endregion
     //}
 
+    [Serializable]
     public class CollectionMaster<TEntity, TKey>: List<TEntity>
         where TEntity : EntityMaster<TKey>
     {
