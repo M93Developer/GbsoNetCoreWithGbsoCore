@@ -3,8 +3,8 @@
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
-@using Gbso.App.Entities
-@model ProfileEntity
+@using Gbso.App.Model.SystemAdministration
+@model Profile
 <br />
 @{
     <table>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             @{
-                ProfilesCollection Perfiles = ViewBag.Perfiles;
+                Profiles Perfiles = ViewBag.Perfiles;
                 if (Perfiles != null)
                 {
                     foreach (var Perfil in Perfiles)

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Gbso.Core.Enumerators;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Gbso.Core.Entities
+namespace Gbso.Core.Model
 {
     ///// <summary>
     ///// Coleccioón Maestra
@@ -59,7 +60,7 @@ namespace Gbso.Core.Entities
     //        TEntity[] NewArray = new TEntity[NewLength];
     //        return (TEntity) Array[index];
     //    }
-        
+
     //    /// <summary>
     //    /// Retorna el primero objeto de la colección cuyo Key sea igual al Key enviado
     //    /// </summary>
@@ -311,17 +312,17 @@ namespace Gbso.Core.Entities
     //}
 
     [Serializable]
-    public class CollectionMaster<TEntity, TKey>: List<TEntity>
+    public class CollectionMaster<TEntity, TKey> : List<TEntity>
         where TEntity : EntityMaster<TKey>
     {
-        /// <summary>
-        /// Agrega nuevo objeto para ser registrado en base de datos
-        /// </summary>
-        /// <param name="entity">Entidad objeto u objeto a registrar</param>
-        public void Create(TEntity entity)
-        {
-            entity.ForceActionState(ActionStateEnum.Created);
-            Add(entity);
-        }
+        //    /// <summary>
+        //    /// Agrega nuevo objeto para ser registrado en base de datos
+        //    /// </summary>
+        //    /// <param name="entity">Entidad objeto u objeto a registrar</param>
+        //    public void Create(TEntity entity)
+        //    {
+        //        entity.ActionState = ActionStateEnum.Created;
+        //        Add(entity);
+        //    }
     }
 }

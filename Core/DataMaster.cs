@@ -1,12 +1,13 @@
-﻿using Gbso.Core.Entities;
+﻿using Gbso.Core.Model;
 using Gbso.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Linq;
-using Gbso.Core.Enum;
+using Gbso.Core.Enumerators;
 using System.Data;
+using Gbso.Core.Interfaces;
 
 namespace Gbso.Core
 {
@@ -31,10 +32,11 @@ namespace Gbso.Core
         protected DataMaster()
         {
             if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
-            var entityDescriptionAttributes = (EntityDatabaseReferences)typeof(TEntity).GetCustomAttribute(typeof(EntityDatabaseReferences));
+            var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = entityDescriptionAttributes.SqlStoredProcedure;
+            SqlString = entityDescriptionAttributes.StoredProcedure;
         }
+      
         /// <summary>
         /// Constructor de la clase que recive una conexión
         /// </summary>
@@ -43,9 +45,9 @@ namespace Gbso.Core
         {
             this.SqlConnection = sqlConnection;
             if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
-            var entityDescriptionAttributes = (EntityDatabaseReferences)typeof(TEntity).GetCustomAttribute(typeof(EntityDatabaseReferences));
+            var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = entityDescriptionAttributes.SqlStoredProcedure;
+            SqlString = entityDescriptionAttributes.StoredProcedure;
         }
 
         /// <summary>
@@ -237,7 +239,7 @@ namespace Gbso.Core
             else
             {
                 var PartesColumnaRestantes = new string[columnFragments.Length - 1];
-                var nombrePrimeraColumna = columnFragments.FirstOrDefault();
+                var firstColumnName = columnFragments.FirstOrDefault();
                 Array.Copy(columnFragments, 1, PartesColumnaRestantes, 0, PartesColumnaRestantes.Length);
                 object objeto = columns.Where(n =>
                     (
@@ -336,34 +338,38 @@ namespace Gbso.Core
         /// <returns></returns>
         private object InitializeProperties(SqlDataReader sqlDataReader, List<object> columns, object instance)
         {
-            ((IEntityMaster)instance).ForceActionState(ActionStateEnum.Original);
-            foreach (string[] item in columns.Where(n => n.GetType() == typeof(string[])))
+            //((IEntityMaster)instance).ForceActionState(ActionStateEnum.Original);
+            Type instanceType = instance.GetType();
+            PropertyInfo propertyState = instanceType.GetProperty("actionState");
+            propertyState.SetValue(instance, ActionStateEnum.Original);
+            foreach (string[] item in columns.Where(c => c.GetType() == typeof(string[])))
             {
-                PropertyInfo property = instance.GetType().GetProperty(item.FirstOrDefault());
-                object dbValor;
+
+                PropertyInfo property = instanceType.GetProperty(item.First());
+                object databaseValue;
                 try
                 {
-                    dbValor = sqlDataReader[item[1]].GetType().Equals(typeof(System.Byte[])) ? sqlDataReader[item[1]] : sqlDataReader[item[1]].ToString().Trim(); //Valor obtenido de la base de datos
+                    databaseValue = sqlDataReader[item[1]].GetType().Equals(typeof(System.Byte[])) ? sqlDataReader[item[1]] : sqlDataReader[item[1]].ToString().Trim(); //Valor obtenido de la base de datos
                 }
                 catch (Exception)
                 {
                     throw new Exception(string.Format("el método de consulta no puede obtener el valor de la colúmna {0}", item[1])); //si la propiedad de la de la entidad no corresponde a una de las columnas devueltas
                 }
-                if ((dbValor.GetType().Equals(typeof(string)) && !String.IsNullOrEmpty(dbValor.ToString())) || dbValor != null)
+                if ((databaseValue.GetType().Equals(typeof(string)) && !String.IsNullOrEmpty(databaseValue.ToString())) || databaseValue != null)
                 {
                     Type propertyType = property.GetMethod.ReturnType;
                     if (propertyType.BaseType.Equals(typeof(System.Enum)))
                     {
-                        property.SetValue(instance, Convert.ToInt32(dbValor));
+                        property.SetValue(instance, Convert.ToInt32(databaseValue));
                     }
                     else if (propertyType.Equals(typeof(System.Byte[])))
                     {
-                        property.SetValue(instance, dbValor);
+                        property.SetValue(instance, databaseValue);
                     }
                     else
                     {
                         propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                        var safeValue = Convert.ChangeType(dbValor, propertyType);
+                        var safeValue = Convert.ChangeType(databaseValue, propertyType);
                         property.SetValue(instance, safeValue);
                     }
                 }
@@ -372,13 +378,13 @@ namespace Gbso.Core
             {
                 foreach (string key in dictionary.Keys)
                 {
-                    PropertyInfo propertyInfo = instance.GetType().GetProperty(key);
+                    PropertyInfo propertyInfo = instanceType.GetProperty(key);
                     Type propertyType = propertyInfo.GetMethod.ReturnType;
-                    if (propertyType.GetInterfaces().Contains(typeof(IEntityMaster))) //Si implementa la interfaz tratar como entidad
+                    if (propertyType.GetNestedTypes().Contains(typeof(EntityMaster<object>))) //Si implementa la interfaz tratar como entidad
                     {
                         var constructor = propertyType.GetConstructors();
                         var newInstanceBySubPropertyClass = propertyType.GetConstructors().FirstOrDefault().Invoke(new Object[] { });
-                        ((IEntityMaster)newInstanceBySubPropertyClass).ForceActionState(ActionStateEnum.Original);
+                        ((EntityMaster<object>)newInstanceBySubPropertyClass).ActionState = ActionStateEnum.Original;
                         newInstanceBySubPropertyClass = InitializeProperties(sqlDataReader, dictionary[key], newInstanceBySubPropertyClass);
                         propertyInfo.SetValue(instance, newInstanceBySubPropertyClass); //inicializar la propiedad de tipo entidad con el contructor por defecto
                     }
@@ -398,10 +404,10 @@ namespace Gbso.Core
             {
                 foreach (Attribute Attribute in Attribute.GetCustomAttributes(propertyInfo))
                 {
-                    if (Attribute.GetType() == typeof(InfoDataBase) && ((InfoDataBase)Attribute).TypeColumn != SqlTypesColumn.AppController)
+                    if (Attribute.GetType() == typeof(DatabasePropertyInfo) && ((DatabasePropertyInfo)Attribute).TypeColumn != SqlTypesColumn.AppController)
                     {
                         var value = propertyInfo.GetValue(entity);
-                        if (value != null) parameters.AddWithValue("@" + ((InfoDataBase)Attribute).ColumnName , value);
+                        if (value != null) parameters.AddWithValue("@" + ((DatabasePropertyInfo)Attribute).ColumnName , value);
                     }
                 }
             }

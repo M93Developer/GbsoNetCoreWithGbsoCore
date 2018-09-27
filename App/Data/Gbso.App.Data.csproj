@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Gbso.App.Model.csproj" />
+    <ProjectReference Include="..\Model\Gbso.App.Model.csproj" />
   </ItemGroup>
 
 </Project>

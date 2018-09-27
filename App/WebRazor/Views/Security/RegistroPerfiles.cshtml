@@ -1,5 +1,5 @@
-﻿@using Gbso.App.Entities
-@model ProfileEntity
+﻿@using Gbso.App.Model.SystemAdministration
+@model Profile
 @{ViewBag.Title = "Security";}
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
@@ -23,7 +23,7 @@
             @{
                 if (ViewBag.PerfilesCargados != null)
                 {
-                    foreach (var Perfil in ViewBag.PerfilesCargados as ProfilesCollection)
+                    foreach (var Perfil in ViewBag.PerfilesCargados as Profiles)
                     {
                         <tr>
                             <td>@Perfil.Key</td>

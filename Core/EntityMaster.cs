@@ -1,4 +1,5 @@
-﻿using Gbso.Core.Enum;
+﻿using Gbso.Core.Enumerators;
+using Gbso.Core.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gbso.Core.Entities
+namespace Gbso.Core.Model
 {
     /// <summary>
     /// Entidad Maestra
@@ -16,48 +17,33 @@ namespace Gbso.Core.Entities
     [Serializable]
     public class EntityMaster<TKey> :IEntityMaster, IComparable<EntityMaster<TKey>>, IEquatable<EntityMaster<TKey>>, ICloneable
     {
-        [InfoDataBase("Key", SqlTypesColumn.PrimaryKey)]
+        [DatabasePropertyInfo("Key", SqlTypesColumn.PrimaryKey)]
         public TKey Key { get; set; }
-        [InfoDataBase("State", SqlTypesColumn.Default)]
-        public EntityEstates State { get; set; }
-        [InfoDataBase("TimeStamp", SqlTypesColumn.Marker)]
+        [DatabasePropertyInfo("State", SqlTypesColumn.Default)]
+        public EntityEstates? State { get; set; }
+        [DatabasePropertyInfo("TimeStamp", SqlTypesColumn.Marker)]
         public byte[] TimeStamp { get; set; }
-        private ActionStateEnum actionState;
-        [InfoDataBase("ActionStatee", SqlTypesColumn.AppController)]
-        public ActionStateEnum ActionState
+        private ActionStateEnum? actionState;
+        [DatabasePropertyInfo("ActionStatee", SqlTypesColumn.AppController)]
+        public ActionStateEnum? ActionState
         {
-            get
-            {
-                return this.actionState;
-            }
+            get => this.actionState;
             set
             {
-                if (actionState == value || value == ActionStateEnum.Null) return;
+                if (actionState == value) return;
                 bool Ok = true;
                 if (actionState == ActionStateEnum.Created && value != ActionStateEnum.CreationOnHold)
-                {
                     Ok = false;
-                }
                 else if (actionState == ActionStateEnum.CreationOnHold && value != ActionStateEnum.Created)
-                {
                     Ok = false;
-                }
-                else if (actionState == ActionStateEnum.Original)
-                {
-                    if (value != ActionStateEnum.Modified || value != ActionStateEnum.Deleted) Ok = false;
-                }
-                else if (actionState == ActionStateEnum.Modified)
-                {
-                    if (value != ActionStateEnum.Deleted || value != ActionStateEnum.ModificationOnHold) Ok = false;
-                }
-                else if (actionState == ActionStateEnum.ModificationOnHold)
-                {
-                    if (value != ActionStateEnum.Modified || value != ActionStateEnum.Deleted) Ok = false;
-                }
-                else if (actionState == ActionStateEnum.Deleted)
-                {
-                    if (value != ActionStateEnum.Modified || value != ActionStateEnum.ModificationOnHold) Ok = false;
-                }
+                else if (actionState == ActionStateEnum.Original && (value != null && value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
+                    Ok = false;
+                else if (actionState == ActionStateEnum.Modified && (value != ActionStateEnum.Deleted && value != ActionStateEnum.ModificationOnHold))
+                    Ok = false;
+                else if (actionState == ActionStateEnum.ModificationOnHold && (value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
+                     Ok = false;
+                else if (actionState == ActionStateEnum.Deleted && (value != ActionStateEnum.Modified && value != ActionStateEnum.ModificationOnHold))
+                    Ok = false;
                 if (!Ok) throw new ActionStateException(String.Format("No puede pasar un estado de acción {0} a {1}", this.actionState.ToString(), value.ToString()));
                 actionState = value;
             }
@@ -81,14 +67,14 @@ namespace Gbso.Core.Entities
             this.ActionState = ActionStateEnum.Created;
         }
 
-        /// <summary>
-        /// Fuerza la asignación del estado de acción (ActionState)
-        /// </summary>
-        /// <param name="actionState">Estado de acción a asignar</param>
-        public void ForceActionState(ActionStateEnum actionState)
-        {
-            this.actionState = actionState;
-        }
+        ///// <summary>
+        ///// Fuerza la asignación del estado de acción (ActionState)
+        ///// </summary>
+        ///// <param name="actionState">Estado de acción a asignar</param>
+        //public void ForceActionState(ActionStateEnum actionState)
+        //{
+        //    this.actionState = actionState;
+        //}
 
         /// <summary>
         /// Compara el objeto con el objeto enviado si ambos tiene Keys Numericos
@@ -130,17 +116,7 @@ namespace Gbso.Core.Entities
 
     }
 
-    public enum ActionStateEnum
-    {
-        Null,
-        Created,
-        CreationOnHold,
-        Original,
-        OriginalPartial,
-        Modified,
-        ModificationOnHold,
-        Deleted
-    }
+    
 
     public class ActionStateException : Exception
     {
