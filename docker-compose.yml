@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  gbso.app.netmvc:
+    image: ${DOCKER_REGISTRY-}gbsoappnetmvc
+    build:
+      context: .
+      dockerfile: Gbso.App.NetMvc/Dockerfile
+
+  gbso.app.api:
+    image: ${DOCKER_REGISTRY-}gbsoappapi
+    build:
+      context: .
+      dockerfile: Gbso.App.Api/Dockerfile
+
