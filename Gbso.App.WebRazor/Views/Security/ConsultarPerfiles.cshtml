@@ -10,7 +10,7 @@
 @{
     foreach (Profile item in @ViewBag.Perfils)
     {
-        <h6>@item.Key - @item.Description - @item.ActionState - @item.UserLastChange.Perfil.Description</h6>
+    <h6>@item.Key - @item.Description - @item.ActionState - @((UserModel) item.UserLastChange).Perfil.Description</h6>
     }
 }
 

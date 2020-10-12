@@ -6,7 +6,7 @@ using Gbso.App.Model.MedicalCenter.Staff;
 
 namespace Gbso.App.Data.MedicalCenter.Staff
 {
-    public class StaffMemberData : DataMaster<StaffMember, long?, StaffMembers, User>
+    public class StaffMemberData : MasterData<StaffMember, long?, StaffMembers>
     {
         public StaffMemberData(SqlConnection SqlConnection) : base(SqlConnection)
         {

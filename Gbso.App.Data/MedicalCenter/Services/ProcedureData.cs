@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace Gbso.App.Data.MedicalCenter.Services
 {
-    public class ProcedureData : DataMaster<Procedure, int?, Procedures, User>
+    public class ProcedureData : MasterData<Procedure, int?, Procedures>
     {
         public ProcedureData(SqlConnection SqlConnection) : base(SqlConnection)
         {

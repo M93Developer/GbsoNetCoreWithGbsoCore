@@ -12,7 +12,7 @@
         Deleted
     }
 
-    public enum EntityEstates
+    public enum ModelEstate
     {
         Enabled = 1,
         Disabled = 0,

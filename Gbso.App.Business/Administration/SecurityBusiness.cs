@@ -41,7 +41,7 @@ namespace Gbso.App.Business.General
         /// </summary>
         /// <param name="user">Usuario a registrar</param>
         /// <returns>Identificador asignado en base de datos</returns>
-        public int? RegisterUser(User user)
+        public int? RegisterUser(UserModel user)
         {
             return new UserData(SqlConnection).Register(user);
         }
@@ -51,7 +51,7 @@ namespace Gbso.App.Business.General
         /// </summary>
         /// <param name="user">Usuario a registrar</param>
         /// <returns>Entidad del usuario registrado</returns>
-        public User RegisterReturnUser(User user)
+        public UserModel RegisterReturnUser(UserModel user)
         {
             return new UserData(SqlConnection).RegisterAndReturnEntity(user);
         }
@@ -61,7 +61,7 @@ namespace Gbso.App.Business.General
         /// </summary>
         /// <param name="user">Usuario a eliminar</param>
         /// <returns>Si el usuario ha diso eliminado o no</returns>
-        public bool DeleteUser(User user)
+        public bool DeleteUser(UserModel user)
         {
             return new UserData(SqlConnection).Delete(user) > 0;
         }
@@ -70,12 +70,12 @@ namespace Gbso.App.Business.General
         /// lista los usuario activos
         /// </summary>
         /// <returns>Una colección de usuarios</returns>
-        public Users ListUsers()
+        public UserCollection ListUsers()
         {
             return new UserData(SqlConnection).GetCollection(
-                new User()
+                new UserModel()
                 {
-                    State = EntityEstates.Enabled
+                    State = ModelEstate.Enabled
                 }
             );
         }
@@ -84,12 +84,12 @@ namespace Gbso.App.Business.General
         /// Lista los usuario inactivos
         /// </summary>
         /// <returns>retorna una lista de usuarios</returns>
-        public Users ListInactiveUsers()
+        public UserCollection ListInactiveUsers()
         {
             return new UserData(SqlConnection).GetCollection(
-                new User()
+                new UserModel()
                 {
-                    State = EntityEstates.Disabled
+                    State = ModelEstate.Disabled
                 }
             );
         }
@@ -147,7 +147,7 @@ namespace Gbso.App.Business.General
             return new ProfileData(SqlConnection).GetCollection(
                 new Profile()
                 {
-                    State = EntityEstates.Enabled
+                    State = ModelEstate.Enabled
                 }
             );
         }
@@ -161,7 +161,7 @@ namespace Gbso.App.Business.General
             return new ProfileData(SqlConnection).GetCollection(
                 new Profile()
                 {
-                    State = EntityEstates.Disabled
+                    State = ModelEstate.Disabled
                 }
             );
         }

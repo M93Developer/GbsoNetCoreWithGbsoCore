@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Gbso.App.Data.MedicalCenter.Patients
 {
-    public class PatientData : DataMaster<Patient, long?, Model.Patients.Patients, User>
+    public class PatientData : MasterData<Patient, long?, Model.Patients.Patients>
     {
         public PatientData(SqlConnection SqlConnection) : base(SqlConnection)
         {

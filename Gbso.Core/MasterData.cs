@@ -17,10 +17,9 @@ namespace Gbso.Core
     /// <typeparam name="TEntity">Tipo de entidad</typeparam>
     /// <typeparam name="TKey">Tipo de llave primaria de la entidad</typeparam>
     /// <typeparam name="TCollection">Tipo de colección de la entidad</typeparam>
-    public class DataMaster<TEntity, TKey, TCollection, TUser> : IData<TEntity, TKey, TCollection>, IDisposable
-        where TEntity : EntityMaster<TKey>, new()
+    public class MasterData<TEntity, TKey, TCollection> : IMasterData<TEntity, TKey, TCollection>, IDisposable
+        where TEntity : MasterModel<TKey>, new()
         where TCollection : CollectionMaster<TEntity, TKey>, new()
-        where TUser : IEntityMaster
     {
 
         protected string SqlString { get; set; }
@@ -29,7 +28,7 @@ namespace Gbso.Core
         /// <summary>
         /// Constructor de cla clase
         /// </summary>
-        protected DataMaster()
+        protected MasterData()
         {
             if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
             var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
@@ -41,7 +40,7 @@ namespace Gbso.Core
         /// Constructor de la clase que recive una conexión
         /// </summary>
         /// <param name="sqlConnection"></param>
-        protected DataMaster(SqlConnection sqlConnection)
+        protected MasterData(SqlConnection sqlConnection)
         {
             this.SqlConnection = sqlConnection;
             if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
@@ -380,11 +379,11 @@ namespace Gbso.Core
                 {
                     PropertyInfo propertyInfo = instanceType.GetProperty(key);
                     Type propertyType = propertyInfo.GetMethod.ReturnType;
-                    if (propertyType.GetNestedTypes().Contains(typeof(EntityMaster<object>))) //Si implementa la interfaz tratar como entidad
+                    if (propertyType.GetNestedTypes().Contains(typeof(MasterModel<object>))) //Si implementa la interfaz tratar como entidad
                     {
                         var constructor = propertyType.GetConstructors();
                         var newInstanceBySubPropertyClass = propertyType.GetConstructors().FirstOrDefault().Invoke(new Object[] { });
-                        ((EntityMaster<object>)newInstanceBySubPropertyClass).ActionState = ActionStateEnum.Original;
+                        ((MasterModel<object>)newInstanceBySubPropertyClass).ActionState = ActionStateEnum.Original;
                         newInstanceBySubPropertyClass = InitializeProperties(sqlDataReader, dictionary[key], newInstanceBySubPropertyClass);
                         propertyInfo.SetValue(instance, newInstanceBySubPropertyClass); //inicializar la propiedad de tipo entidad con el contructor por defecto
                     }

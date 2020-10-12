@@ -3,19 +3,21 @@ using Gbso.Core;
 using Gbso.Core.Model;
 using Gbso.App.Model;
 using Gbso.Core.Extensions;
+using Gbso.App.Model.SystemAdministration;
+
 namespace Gbso.App.Model.General
 {
     #region Entities
 
     [Serializable]
     [DatabaseEntityInfo("Person", "Person_Crud")]
-    public class Person : AppEntityMaster<long?>
+    public class PersonModel : MasterModel<long?>
     {
         /// <summary>
         /// Type identification of the person
         /// </summary>
         [DatabasePropertyInfo("TypeId")]
-        public TypesIdPerson? TypeId { get; set; }
+        public IdeTypes? TypeId { get; set; }
 
         /// <summary>
         /// Identification number of a person
@@ -42,7 +44,7 @@ namespace Gbso.App.Model.General
 
     [Serializable]
     [DatabaseEntityInfo("NaturalPerson", "NaturalPerson_Crud")]
-    public class NaturalPerson : Person
+    public class NaturalPerson : PersonModel
     {
         /// <summary>
         /// first name
@@ -86,7 +88,7 @@ namespace Gbso.App.Model.General
 
     [Serializable]
     [DatabaseEntityInfo("LegalPerson", "LegalPerson_Crud")]
-    public class LegalPerson : Person
+    public class LegalPerson : PersonModel
     {
         /// <summary>
         /// Short name
@@ -116,7 +118,7 @@ namespace Gbso.App.Model.General
 
     [Serializable]
     [DatabaseEntityInfo("VirtualPerson", "VirtualPerson_Crud")]
-    public class VirtualPerson : Person
+    public class VirtualPerson : PersonModel
     {
         /// <summary>
         /// Name
@@ -135,7 +137,7 @@ namespace Gbso.App.Model.General
     #region Collections
 
     [Serializable]
-    public class Persons : CollectionMaster<Person, long?> { }
+    public class Persons : CollectionMaster<PersonModel, long?> { }
 
     [Serializable]
     public class NaturalPersons : CollectionMaster<NaturalPerson, long?> { }
@@ -151,7 +153,7 @@ namespace Gbso.App.Model.General
     #region Enumerables
 
     [DatabaseEnumInfo("EnumTypesIdPerson")]
-    public enum TypesIdPerson
+    public enum IdeTypes
     {
         [DatabaseItemEnumInfo("R.C.", "Registro Cibil")]
         RC = 1,

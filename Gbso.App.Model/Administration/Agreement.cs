@@ -1,4 +1,5 @@
 ﻿using Gbso.App.Model.General;
+using Gbso.App.Model.SystemAdministration;
 using Gbso.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Gbso.App.Model.Administration
 {
-    public class Agreement : EntityMaster<long?>
+    public class Agreement : Core.Model.MasterModel<long?>
     {
         public ExternalE External { get; set; }
 

@@ -4,7 +4,7 @@ using Gbso.App.Model.SystemAdministration;
 
 namespace Gbso.App.Data.SystemAdministration
 {
-    public class UserData : DataMaster<User, int?, Users, User>
+    public class UserData : MasterData<UserModel, int?, UserCollection>
     {
         public UserData(SqlConnection SqlConnection) : base(SqlConnection)
         {

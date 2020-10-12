@@ -1,10 +1,11 @@
 ﻿using System;
 using Gbso.App.Model;
+using Gbso.App.Model.SystemAdministration;
 using Gbso.Core.Model;
 
 namespace Gbso.App.Model.General.Program
 {
-    public class Event : AppEntityMaster<long?>
+    public class Event : MasterModel<long?>
     {
         public DateTime? StartDateTime { get; set; }
 

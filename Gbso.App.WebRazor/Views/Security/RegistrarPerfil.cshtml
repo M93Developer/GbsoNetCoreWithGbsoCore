@@ -13,7 +13,7 @@
                 <th>@Html.LabelFor(m => m.Key)</th>
                 <th>@Html.LabelFor(m => m.Description)</th>
                 <th>@Html.LabelFor(m => m.ActionState)</th>
-                <th>@Html.LabelFor(m => m.UserLastChange.Nikname)</th>
+                <th>@Html.LabelFor(m => ((UserModel)m.UserLastChange).Nikname)</th>
             </tr>
         </thead>
         <tbody>

@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace Gbso.App.Data.MedicalCenter.Program
 {
-    class ApointmentData : DataMaster<Apointment, long?, Apointments, User>
+    class ApointmentData : MasterData<Apointment, long?, Apointments>
     {
         public ApointmentData(SqlConnection SqlConnection) : base(SqlConnection)
         {

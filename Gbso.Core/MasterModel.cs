@@ -3,6 +3,7 @@ using Gbso.Core.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -15,15 +16,38 @@ namespace Gbso.Core.Model
     /// </summary>
     /// <typeparam name="TypeKey">Recibe el tipo de la llave primaria</typeparam>
     [Serializable]
-    public class EntityMaster<TKey> :IEntityMaster, IComparable<EntityMaster<TKey>>, IEquatable<EntityMaster<TKey>>, ICloneable
+    public class MasterModel<TKey> : IMasterModel<TKey>, IComparable<MasterModel<TKey>>, IEquatable<MasterModel<TKey>>, ICloneable
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        [Key]
         [DatabasePropertyInfo("Key", SqlTypesColumn.PrimaryKey)]
         public TKey Key { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [DatabasePropertyInfo("State", SqlTypesColumn.Default)]
-        public EntityEstates? State { get; set; }
+        public ModelEstate? State { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [DatabasePropertyInfo("TimeStamp", SqlTypesColumn.Marker)]
         public byte[] TimeStamp { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [DatabasePropertyInfo("UserLastChange", SqlTypesColumn.ForeignKey)]
+        public IUserModel<TKey> UserLastChange { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [DatabasePropertyInfo("IpLastChange")]
+        public string IpLastChange { get; set; }
         private ActionStateEnum? actionState;
+        /// <summary>
+        /// 
+        /// </summary>
         [DatabasePropertyInfo("ActionStatee", SqlTypesColumn.AppController)]
         public ActionStateEnum? ActionState
         {
@@ -52,7 +76,7 @@ namespace Gbso.Core.Model
         /// <summary>
         /// Consutrctor de la clase
         /// </summary>
-        public EntityMaster()
+        public MasterModel()
         {
             this.ActionState = ActionStateEnum.Created;
         }
@@ -61,7 +85,7 @@ namespace Gbso.Core.Model
         /// Constructor de la clase
         /// </summary>
         /// <param name="key"></param>
-        public EntityMaster(TKey key)
+        public MasterModel(TKey key)
         {
             this.Key = key;
             this.ActionState = ActionStateEnum.Created;
@@ -81,7 +105,7 @@ namespace Gbso.Core.Model
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        int IComparable<EntityMaster<TKey>>.CompareTo(EntityMaster<TKey> entity)
+        int IComparable<MasterModel<TKey>>.CompareTo(MasterModel<TKey> entity)
         {
             try
             {
@@ -103,15 +127,66 @@ namespace Gbso.Core.Model
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        bool IEquatable<EntityMaster<TKey>>.Equals(EntityMaster<TKey> entity)
+        bool IEquatable<MasterModel<TKey>>.Equals(MasterModel<TKey> entity)
         {
             if (this.Key.Equals(entity.Key)) return true;
             return false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public TKey GetKey()
+        {
+            return Key;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ModelEstate? GetState()
+        {
+            return State;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetTimeStamp()
+        {
+            return TimeStamp;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IUserModel<TKey> GetUserLastChange()
+        {
+            return UserLastChange;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string GetIpLastChange()
+        {
+            return IpLastChange;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ActionStateEnum? GetActionState()
+        {
+            return actionState;
         }
 
     }

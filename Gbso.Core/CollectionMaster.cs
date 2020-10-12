@@ -312,8 +312,8 @@ namespace Gbso.Core.Model
     //}
 
     [Serializable]
-    public class CollectionMaster<TEntity, TKey> : List<TEntity>
-        where TEntity : EntityMaster<TKey>
+    public class CollectionMaster<TModel, TKey> : List<TModel>
+        where TModel : MasterModel<TKey>
     {
         //    /// <summary>
         //    /// Agrega nuevo objeto para ser registrado en base de datos

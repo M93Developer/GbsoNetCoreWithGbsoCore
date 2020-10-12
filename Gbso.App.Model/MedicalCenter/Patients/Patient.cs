@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Gbso.App.Model.MedicalCenter.Program;
+using Gbso.App.Model.SystemAdministration;
 
 namespace Gbso.App.Model.Patients
 {
@@ -15,5 +16,5 @@ namespace Gbso.App.Model.Patients
         public Apointments Apointments { get; set; }
     }
 
-    public class Patients : CollectionMaster<Patient, long?>{}
+    public class Patients : CollectionMaster<Patient, long?> {}
 }

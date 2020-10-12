@@ -11,21 +11,21 @@ using Gbso.App.Model.SystemAdministration;
 
 namespace Gbso.App.Data.General
 {
-    public class PersonData : DataMaster<Person, long?, Persons, User>
+    public class PersonData : MasterData<PersonModel, long?, Persons>
     {
         public PersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {
         }
     }
 
-    public class LegalPersonData : DataMaster<LegalPerson, long?, LegalPersons, User>
+    public class LegalPersonData : MasterData<LegalPerson, long?, LegalPersons>
     {
         public LegalPersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {
         }
     }
 
-    public class NaturalPersonData : DataMaster<NaturalPerson, long?, NaturalPersons, User>
+    public class NaturalPersonData : MasterData<NaturalPerson, long?, NaturalPersons>
     {
         public NaturalPersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {

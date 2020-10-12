@@ -8,7 +8,7 @@ namespace Gbso.App.Model.SystemAdministration
 {
     [Serializable]
     [DatabaseEntityInfo("Profile_Crud", "Profile_Crud")]
-    public class Profile : AppEntityMaster<short?>
+    public class Profile : MasterModel<short?>
     {
         [DatabasePropertyInfo("Description",SqlTypesColumn.Default,true)]
         public string Description { get; set; }

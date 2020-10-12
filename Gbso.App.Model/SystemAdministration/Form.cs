@@ -6,10 +6,10 @@ namespace Gbso.App.Model.SystemAdministration
 {
     [Serializable]
     [DatabaseEntityInfo("Form", "Form_Crud")]
-    public class Form : AppEntityMaster<short?>
+    public class Form : MasterModel<short?>
     {
         public Section Section { get; set; }
     }
     [Serializable]
-    public class Forms : CollectionMaster<Form, short?>{}
+    public class Forms : CollectionMaster<Form, short?> {}
 }
