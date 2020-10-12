@@ -35,5 +35,11 @@ namespace Gbso.App.Api.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
+        {
+            return "prueba con id";
+        }
     }
 }

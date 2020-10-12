@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gbso.App.WebRazor", "Gbso.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gbso.App.Api", "Gbso.App.Api\Gbso.App.Api.csproj", "{61F3A457-17BE-4103-9E6B-1D3CB0928029}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gbso.App.NetMvc", "Gbso.App.NetMvc\Gbso.App.NetMvc.csproj", "{1DCD8270-CE2F-4272-9232-CF63C3408D17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gbso.App.NetMvc", "Gbso.App.NetMvc\Gbso.App.NetMvc.csproj", "{1DCD8270-CE2F-4272-9232-CF63C3408D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
