@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gbso.App.Data;
 using Gbso.App.Data.SystemAdministration;
-using Gbso.App.Model;
 using Gbso.App.Model.SystemAdministration;
 using Gbso.Core;
 using Gbso.Core.Enumerators;

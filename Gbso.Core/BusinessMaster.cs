@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using Gbso.Core.Enumerators;
-using System.Configuration;
 
 namespace Gbso.Core
 {

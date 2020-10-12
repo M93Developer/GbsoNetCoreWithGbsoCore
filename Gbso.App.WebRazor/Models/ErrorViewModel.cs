@@ -1,5 +1,3 @@
-using System;
-
 namespace WebRazor.Models
 {
     public class ErrorViewModel

@@ -1,5 +1,4 @@
 ﻿using Gbso.Core.Model;
-using Gbso.App.Model;
 using Gbso.Core;
 using Gbso.Core.Enumerators;
 using System;

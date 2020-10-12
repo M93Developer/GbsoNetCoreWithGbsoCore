@@ -1,7 +1,5 @@
-﻿using System;
-using Gbso.Core;
+﻿using Gbso.Core;
 using System.Data.SqlClient;
-using Gbso.App.Model.SystemAdministration;
 using Gbso.App.Model.MedicalCenter.Staff;
 
 namespace Gbso.App.Data.MedicalCenter.Staff

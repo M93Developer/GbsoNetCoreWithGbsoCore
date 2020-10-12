@@ -1,8 +1,4 @@
-﻿using System;
-using Gbso.App.Model;
-using Gbso.Core.Model;
-using System.Collections.Generic;
-using Gbso.App.Model.SystemAdministration;
+﻿using Gbso.Core.Model;
 
 namespace Gbso.App.Model.MedicalCenter.Services
 {

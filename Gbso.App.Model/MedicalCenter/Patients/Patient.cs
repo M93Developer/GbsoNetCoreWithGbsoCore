@@ -1,10 +1,6 @@
 ﻿using Gbso.Core.Model;
 using Gbso.App.Model.General;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Gbso.App.Model.MedicalCenter.Program;
-using Gbso.App.Model.SystemAdministration;
 
 namespace Gbso.App.Model.Patients
 {

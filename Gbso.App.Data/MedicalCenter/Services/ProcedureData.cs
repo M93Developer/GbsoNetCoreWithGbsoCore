@@ -1,6 +1,4 @@
-﻿using System;
-using Gbso.App.Model.SystemAdministration;
-using Gbso.App.Model.MedicalCenter.Services;
+﻿using Gbso.App.Model.MedicalCenter.Services;
 using Gbso.Core;
 using System.Data.SqlClient;
 

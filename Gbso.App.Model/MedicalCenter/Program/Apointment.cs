@@ -4,7 +4,6 @@ using Gbso.App.Model.Patients;
 using Gbso.App.Model.MedicalCenter.Staff;
 using Gbso.App.Model.MedicalCenter.Services;
 using Gbso.App.Model.General.Program;
-using Gbso.App.Model.SystemAdministration;
 
 namespace Gbso.App.Model.MedicalCenter.Program
 {

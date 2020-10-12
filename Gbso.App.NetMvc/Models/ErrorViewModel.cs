@@ -1,5 +1,3 @@
-using System;
-
 namespace Gbso.App.NetMvc.Models
 {
     public class ErrorViewModel
