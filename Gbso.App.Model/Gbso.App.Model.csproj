@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\Gbso.App.Model.csproj" />
+    <ProjectReference Include="..\Gbso.Core\Gbso.Core.csproj" />
   </ItemGroup>
 
 </Project>

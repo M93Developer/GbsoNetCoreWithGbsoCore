@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Gbso.App.Data.csproj" />
-    <ProjectReference Include="..\Model\Gbso.App.Model.csproj" />
+    <ProjectReference Include="..\Gbso.App.Data\Gbso.App.Data.csproj" />
+    <ProjectReference Include="..\Gbso.App.Model\Gbso.App.Model.csproj" />
   </ItemGroup>
 
 </Project>

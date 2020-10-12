@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Business\Gbso.App.Business.csproj" />
-    <ProjectReference Include="..\Model\Gbso.App.Model.csproj" />
+    <ProjectReference Include="..\Gbso.App.Business\Gbso.App.Business.csproj" />
+    <ProjectReference Include="..\Gbso.App.Model\Gbso.App.Model.csproj" />
   </ItemGroup>
 
 </Project>
