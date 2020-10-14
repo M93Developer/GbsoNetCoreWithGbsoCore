@@ -1,4 +1,5 @@
-﻿using Gbso.Core.Enumerators;
+﻿using Gbso.Core.Attributes;
+using Gbso.Core.Enumerators;
 using Gbso.Core.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;

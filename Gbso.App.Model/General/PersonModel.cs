@@ -2,6 +2,7 @@
 using Gbso.Core;
 using Gbso.Core.Model;
 using Gbso.Core.Extensions;
+using Gbso.Core.Attributes;
 
 namespace Gbso.App.Model.General
 {

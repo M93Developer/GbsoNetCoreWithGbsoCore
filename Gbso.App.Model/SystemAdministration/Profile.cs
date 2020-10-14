@@ -2,6 +2,7 @@
 using Gbso.Core;
 using Gbso.Core.Enumerators;
 using System;
+using Gbso.Core.Attributes;
 
 namespace Gbso.App.Model.SystemAdministration
 {

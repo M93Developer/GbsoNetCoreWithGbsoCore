@@ -1,7 +1,7 @@
 ﻿using Gbso.Core.Enumerators;
 using System;
 
-namespace Gbso.Core
+namespace Gbso.Core.Attributes
 {
     public class DatabasePropertyInfo : Attribute
     {

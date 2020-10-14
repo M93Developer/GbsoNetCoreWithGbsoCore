@@ -1,4 +1,5 @@
 ﻿
+using Gbso.Core.Attributes;
 using System.Reflection;
 
 namespace Gbso.Core.Extensions

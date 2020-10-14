@@ -1,4 +1,5 @@
 ﻿using Gbso.Core;
+using Gbso.Core.Attributes;
 using Gbso.Core.Model;
 using System;
 

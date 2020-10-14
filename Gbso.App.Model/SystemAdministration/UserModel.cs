@@ -4,6 +4,7 @@ using Gbso.Core.Model;
 using Gbso.Core.Enumerators;
 using System;
 using Gbso.Core.Interfaces;
+using Gbso.Core.Attributes;
 
 namespace Gbso.App.Model.SystemAdministration
 {

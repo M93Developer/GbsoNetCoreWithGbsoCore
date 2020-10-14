@@ -8,6 +8,7 @@ using System.Linq;
 using Gbso.Core.Enumerators;
 using System.Data;
 using Gbso.Core.Interfaces;
+using Gbso.Core.Attributes;
 
 namespace Gbso.Core
 {
