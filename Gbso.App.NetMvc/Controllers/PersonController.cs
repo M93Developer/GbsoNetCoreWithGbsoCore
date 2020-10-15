@@ -22,8 +22,8 @@ namespace Gbso.App.NetMvc.Controllers
 
 
 
-    // GET: PersonController
-    public async Task<ActionResult> Index()
+        // GET: PersonController
+        public async Task<ActionResult> Index()
         {
             var client = new HttpClient();
             var json = await client.GetStringAsync(PersonUrl);
