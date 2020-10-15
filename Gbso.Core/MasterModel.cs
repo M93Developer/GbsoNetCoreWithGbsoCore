@@ -39,32 +39,32 @@ namespace Gbso.Core.Model
         /// </summary>
         [DatabasePropertyInfo("IpLastChange")]
         public string IpLastChange { get; set; }
-        private ActionStateEnum? actionState;
+        private ActionStateEnum? _actionState { get; set; }
         /// <summary>
         /// 
         /// </summary>
         [DatabasePropertyInfo("ActionStatee", SqlTypesColumn.AppController)]
         public ActionStateEnum? ActionState
         {
-            get => this.actionState;
+            get => this._actionState;
             set
             {
-                if (actionState == value) return;
+                if (_actionState == value) return;
                 bool Ok = true;
-                if (actionState == ActionStateEnum.Created && value != ActionStateEnum.CreationOnHold)
+                if (_actionState == ActionStateEnum.Created && value != ActionStateEnum.CreationOnHold)
                     Ok = false;
-                else if (actionState == ActionStateEnum.CreationOnHold && value != ActionStateEnum.Created)
+                else if (_actionState == ActionStateEnum.CreationOnHold && value != ActionStateEnum.Created)
                     Ok = false;
-                else if (actionState == ActionStateEnum.Original && (value != null && value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
+                else if (_actionState == ActionStateEnum.Original && (value != null && value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
                     Ok = false;
-                else if (actionState == ActionStateEnum.Modified && (value != ActionStateEnum.Deleted && value != ActionStateEnum.ModificationOnHold))
+                else if (_actionState == ActionStateEnum.Modified && (value != ActionStateEnum.Deleted && value != ActionStateEnum.ModificationOnHold))
                     Ok = false;
-                else if (actionState == ActionStateEnum.ModificationOnHold && (value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
+                else if (_actionState == ActionStateEnum.ModificationOnHold && (value != ActionStateEnum.Modified && value != ActionStateEnum.Deleted))
                      Ok = false;
-                else if (actionState == ActionStateEnum.Deleted && (value != ActionStateEnum.Modified && value != ActionStateEnum.ModificationOnHold))
+                else if (_actionState == ActionStateEnum.Deleted && (value != ActionStateEnum.Modified && value != ActionStateEnum.ModificationOnHold))
                     Ok = false;
-                if (!Ok) throw new ActionStateException(String.Format("No puede pasar un estado de acción {0} a {1}", this.actionState.ToString(), value.ToString()));
-                actionState = value;
+                if (!Ok) throw new ActionStateException(String.Format("No puede pasar un estado de acción {0} a {1}", this._actionState.ToString(), value.ToString()));
+                _actionState = value;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Gbso.Core.Model
         /// </summary>
         public MasterModel()
         {
-            this.ActionState = ActionStateEnum.Created;
+            //this.ActionState = ActionStateEnum.Created;
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Gbso.Core.Model
         /// <returns></returns>
         public ActionStateEnum? GetActionState()
         {
-            return actionState;
+            return _actionState;
         }
 
     }

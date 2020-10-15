@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controller.cs" />
     <Compile Remove="SessionVewState.cs" />
   </ItemGroup>
 

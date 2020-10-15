@@ -37,7 +37,7 @@ namespace Gbso.App.Business.General
         /// <returns>Identificador asignado en base de datos</returns>
         public int? RegisterUser(UserModel user)
         {
-            return new UserData(SqlConnection).Register(user);
+            return new UserData(SqlConnection).Set(user);
         }
         
         /// <summary>
@@ -47,7 +47,7 @@ namespace Gbso.App.Business.General
         /// <returns>Entidad del usuario registrado</returns>
         public UserModel RegisterReturnUser(UserModel user)
         {
-            return new UserData(SqlConnection).RegisterAndReturnEntity(user);
+            return new UserData(SqlConnection).SetAndReturnModel(user);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Gbso.App.Business.General
         /// <returns>Una colección de usuarios</returns>
         public UserCollection ListUsers()
         {
-            return new UserData(SqlConnection).GetCollection(
+            return new UserData(SqlConnection).Get(
                 new UserModel()
                 {
                     State = ModelEstate.Enabled
@@ -80,7 +80,7 @@ namespace Gbso.App.Business.General
         /// <returns>retorna una lista de usuarios</returns>
         public UserCollection ListInactiveUsers()
         {
-            return new UserData(SqlConnection).GetCollection(
+            return new UserData(SqlConnection).Get(
                 new UserModel()
                 {
                     State = ModelEstate.Disabled
@@ -99,7 +99,7 @@ namespace Gbso.App.Business.General
         /// <returns>retorna el identificador asignado al perfil registrado</returns>
         public int? RegisterProfile(Profile profile)
         {
-            return new ProfileData(SqlConnection).Register(profile);
+            return new ProfileData(SqlConnection).Set(profile);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Gbso.App.Business.General
         /// <returns>retorna el número de perfiles registrados</returns>
         public int? RegisterProfiles(Profiles profiles)
         {
-            return new ProfileData(SqlConnection).UpdateCollection(profiles.Where(n => n.ActionState == ActionStateEnum.Created) as Profiles).Registered;
+            return new ProfileData(SqlConnection).Update(profiles.Where(n => n.ActionState == ActionStateEnum.Created) as Profiles).Registered;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Gbso.App.Business.General
         /// <returns>Retorna el objeto registrado</returns>
         public Profile RegisterReturnProfile(Profile profile)
         {
-            return new ProfileData(SqlConnection).RegisterAndReturnEntity(profile);
+            return new ProfileData(SqlConnection).SetAndReturnModel(profile);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Gbso.App.Business.General
         /// <returns></returns>
         public Profiles ListActiveProfiles()
         {
-            return new ProfileData(SqlConnection).GetCollection(
+            return new ProfileData(SqlConnection).Get(
                 new Profile()
                 {
                     State = ModelEstate.Enabled
@@ -152,7 +152,7 @@ namespace Gbso.App.Business.General
         /// <returns>Retorna un perfil</returns>
         public Profiles ListInactiveProfiles()
         {
-            return new ProfileData(SqlConnection).GetCollection(
+            return new ProfileData(SqlConnection).Get(
                 new Profile()
                 {
                     State = ModelEstate.Disabled

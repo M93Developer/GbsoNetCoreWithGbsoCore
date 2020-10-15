@@ -62,9 +62,14 @@
   <ItemGroup>
     <Build Include="General\Person.sql" />
     <Build Include="Schemas\General.sql" />
-    <Build Include="General\ModelState.sql" />
+    <Build Include="General\IdType.sql" />
+    <none Include="General\IdTypePostDeployment.sql" />
+    <Build Include="General\Person_Crud.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Gbso.App.Mssql.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

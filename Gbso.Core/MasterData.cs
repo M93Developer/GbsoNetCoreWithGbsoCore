@@ -55,16 +55,17 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public TKey Register(TEntity entity)
+        public TKey Set(TEntity entity)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
-                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Register);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Set);
                 var param = sqlCommand.Parameters;
                 EntityPropertiesToParameterCollection(ref param, entity);
-                string sKey = sqlCommand.ExecuteScalar().ToString();
+                string sKey = Convert.ToString(sqlCommand.ExecuteScalar());
                 return string.IsNullOrEmpty(sKey) ? default(TKey) : (TKey)Convert.ChangeType(sKey, typeof(TKey));
             }
         }
@@ -74,7 +75,7 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public TEntity RegisterAndReturnEntity(TEntity entity)
+        public TEntity SetAndReturnModel(TEntity entity)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -88,7 +89,7 @@ namespace Gbso.Core
         }
 
         /// <summary>
-        /// Elimina un objeto de la base de datos
+        /// Elimina los objetos que tengan las mismas propiedades del objeto envíado
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>Número de registros afectados</returns>
@@ -106,29 +107,49 @@ namespace Gbso.Core
         }
 
         /// <summary>
+        /// Elimina un objteo por su clave principal
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public int Delete(TKey key)
+        {
+            return Delete(new TEntity() { Key = key });
+        }
+
+        /// <summary>
         /// Devuelve un objeto de la base de datos
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="Key"></param>
         /// <returns></returns>
-        public TEntity Get(TEntity entity)
+        public TEntity Get(TKey key)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Get);
+                sqlCommand.Parameters.AddWithValue("@Key", key);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
                 return SqlDataRederToEntity(sqlCommand.ExecuteReader());
             }
         }
 
         /// <summary>
-        /// Devuelve una colección de objetos de la base de datos
+        /// Devuelve una colección con todos los objetos de un mismo tipo
+        /// </summary>
+        /// <returns></returns>
+        public TCollection Get()
+        {
+            return Get(new TEntity());
+        }
+
+        /// <summary>
+        /// Devuelve una colección de objetos de la base de datos que tengan los mismo parámetros del objeto envíado
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public TCollection GetCollection(TEntity entity)
+        public TCollection Get(TEntity entity)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -153,6 +174,7 @@ namespace Gbso.Core
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Update);
                 var param = sqlCommand.Parameters;
                 EntityPropertiesToParameterCollection(ref param, entity);
@@ -165,12 +187,13 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public TEntity UpdateAndReturnEntity(TEntity entity)
+        public TEntity UpdateAndReturnModel(TEntity entity)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.UpdateAndReturnEntity);
                 var param = sqlCommand.Parameters;
                 EntityPropertiesToParameterCollection(ref param, entity);
@@ -183,12 +206,13 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public UpdateCollectionResult UpdateCollection(TCollection collection)
+        public UpdateCollectionResult Update(TCollection collection)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
                 var updateCollectionResult = new UpdateCollectionResult();
                 foreach (TEntity Entity in collection.OrderBy(n => n.ActionState))
                 {
@@ -197,7 +221,7 @@ namespace Gbso.Core
                     switch (Entity.ActionState)
                     {
                         case ActionStateEnum.Created:
-                            sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Register);
+                            sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Set);
                             sqlCommand.ExecuteNonQuery();
                             updateCollectionResult.Registered++;
                             break;
@@ -340,7 +364,7 @@ namespace Gbso.Core
         {
             //((IEntityMaster)instance).ForceActionState(ActionStateEnum.Original);
             Type instanceType = instance.GetType();
-            PropertyInfo propertyState = instanceType.GetProperty("actionState");
+            PropertyInfo propertyState = instanceType.BaseType.GetProperty("_actionState", BindingFlags.NonPublic | BindingFlags.Instance);
             propertyState.SetValue(instance, ActionStateEnum.Original);
             foreach (string[] item in columns.Where(c => c.GetType() == typeof(string[])))
             {
@@ -349,18 +373,22 @@ namespace Gbso.Core
                 object databaseValue;
                 try
                 {
-                    databaseValue = sqlDataReader[item[1]].GetType().Equals(typeof(System.Byte[])) ? sqlDataReader[item[1]] : sqlDataReader[item[1]].ToString().Trim(); //Valor obtenido de la base de datos
+                    var res = sqlDataReader[item[1]];
+                    var w2 = res.GetType();
+                    databaseValue = sqlDataReader[item[1]].GetType().Equals(typeof(System.Byte[])) ? sqlDataReader[item[1]] : sqlDataReader[item[1]] is DBNull ? null : sqlDataReader[item[1]]; //Valor obtenido de la base de datos
                 }
                 catch (Exception)
                 {
                     throw new Exception(string.Format("el método de consulta no puede obtener el valor de la colúmna {0}", item[1])); //si la propiedad de la de la entidad no corresponde a una de las columnas devueltas
                 }
-                if ((databaseValue.GetType().Equals(typeof(string)) && !String.IsNullOrEmpty(databaseValue.ToString())) || databaseValue != null)
+                if (databaseValue != null && !String.IsNullOrEmpty(databaseValue.ToString()))
                 {
-                    Type propertyType = property.GetMethod.ReturnType;
-                    if (propertyType.BaseType.Equals(typeof(System.Enum)))
+                    Type propertyType = property.PropertyType;
+                    if (propertyType.IsEnum || (Nullable.GetUnderlyingType(propertyType)?.IsEnum ?? false))
                     {
-                        property.SetValue(instance, Convert.ToInt32(databaseValue));
+                        var enumType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+                        var value = Enum.Parse(enumType, databaseValue.ToString());
+                        property.SetValue(instance, value);
                     }
                     else if (propertyType.Equals(typeof(System.Byte[])))
                     {
@@ -394,7 +422,7 @@ namespace Gbso.Core
         }
 
         /// <summary>
-        /// Crea los parámetros de una consulta a partir de las propiedades y descripciones de una entidad entidad
+        /// Setea las propiedades de un ogjeto en parametros sql
         /// </summary>
         /// <param name="parameters">Parametros</param>
         /// <param name="entity">Entidad u objeto del cual se obtienen los parámetros</param>
@@ -418,5 +446,6 @@ namespace Gbso.Core
             if (SqlConnection != null && SqlConnection.State != System.Data.ConnectionState.Closed) SqlConnection.Dispose();
             SqlString = null;
         }
+
     }
 }

@@ -9,14 +9,14 @@ namespace Gbso.App.Model.General
     #region Entities
 
     [Serializable]
-    [DatabaseEntityInfo("Person", "Person_Crud")]
+    [DatabaseEntityInfo("General.Person", "General.Person_Crud")]
     public class PersonModel : MasterModel<long?>
     {
         /// <summary>
         /// Type identification of the person
         /// </summary>
-        [DatabasePropertyInfo("TypeId")]
-        public IdeTypes? TypeId { get; set; }
+        [DatabasePropertyInfo("IdType")]
+        public IdeTypes IdType { get; set; }
 
         /// <summary>
         /// Identification number of a person
@@ -33,12 +33,12 @@ namespace Gbso.App.Model.General
         /// Birthdate of the person
         /// </summary>
         [DatabasePropertyInfo("Birthdate")]
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         /// <summary>
         /// Year old of the person
         /// </summary>
-        public TimeSpan? YearOld { get => Birthdate != null ? DateTime.Now - Birthdate : (TimeSpan?)null; }
+        public int? YearOld { get => Birthdate != null ? (new DateTime() + (DateTime.Now - Birthdate.Value.AddDays(1).AddYears(1))).Year : (int?)null; }
     }
 
     [Serializable]
@@ -111,7 +111,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Full name
         /// </summary>
-        public override string FullName { get => string.Format("{2}\n{1}: {2}", Name, TypeId.GetCode(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
+        public override string FullName { get => string.Format("{2}\n{1}: {2}", Name, IdType.GetCode(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
 
     }
 
@@ -128,7 +128,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Full name
         /// </summary>
-        public override string FullName { get => string.Format("{2}\n{1}: {2}", Name, TypeId.GetCode(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
+        public override string FullName { get => string.Format("{2}\n{1}: {2}", Name, IdType.GetCode(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
     }
 
     #endregion
@@ -136,7 +136,7 @@ namespace Gbso.App.Model.General
     #region Collections
 
     [Serializable]
-    public class Persons : CollectionMaster<PersonModel, long?> { }
+    public class PersonCollection : CollectionMaster<PersonModel, long?> { }
 
     [Serializable]
     public class NaturalPersons : CollectionMaster<NaturalPerson, long?> { }

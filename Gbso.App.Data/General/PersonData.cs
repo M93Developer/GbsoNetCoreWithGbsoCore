@@ -4,7 +4,7 @@ using Gbso.App.Model.General;
 
 namespace Gbso.App.Data.General
 {
-    public class PersonData : MasterData<PersonModel, long?, Persons>
+    public class PersonData : MasterData<PersonModel, long?, PersonCollection>
     {
         public PersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {

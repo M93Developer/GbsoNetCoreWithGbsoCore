@@ -21,7 +21,7 @@
 
     public enum SqlAction
     {
-        Register = 1,
+        Set = 1,
         Get = 2,
         Update = 3,
         Delete = 4,
