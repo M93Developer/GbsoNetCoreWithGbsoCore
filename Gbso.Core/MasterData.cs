@@ -345,7 +345,7 @@ namespace Gbso.Core
         private TEntity SqlDataRederToEntity(SqlDataReader sqlDataReader)
         {
             var columns = new List<object>();
-            for (int i = 0; i > sqlDataReader.FieldCount; i++)
+            for (int i = 0; i < sqlDataReader.FieldCount; i++)
             {
                 ValidarPartesColumna(ref columns, sqlDataReader.GetName(i));
             }
