@@ -4,23 +4,16 @@ using Gbso.App.Model.General;
 
 namespace Gbso.App.Data.General
 {
-    public class PersonData : MasterData<PersonModel, long?, PersonCollection>
+    public class PersonData : PersonData<PersonModel>
     {
         public PersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {
         }
     }
-
-    public class LegalPersonData : MasterData<LegalPerson, long?, LegalPersons>
+    public class PersonData<TPerson> : MasterData<TPerson, long?, PersonCollection<TPerson>>
+        where TPerson : PersonModel, new()
     {
-        public LegalPersonData(SqlConnection SqlConnection) : base(SqlConnection)
-        {
-        }
-    }
-
-    public class NaturalPersonData : MasterData<NaturalPerson, long?, NaturalPersons>
-    {
-        public NaturalPersonData(SqlConnection SqlConnection) : base(SqlConnection)
+        public PersonData(SqlConnection SqlConnection) : base(SqlConnection)
         {
         }
     }
