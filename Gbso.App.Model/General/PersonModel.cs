@@ -15,16 +15,10 @@ namespace Gbso.App.Model.General
     public class PersonModel : MasterModel<long?>
     {
         /// <summary>
-        /// Nombre compuesto
-        /// <para>Se requiere sobrescribir con código get de nombre compuesto</para>
-        /// </summary>
-        public virtual string Name { get => throw new NotImplementedException(); }
-
-        /// <summary>
         /// Birthdate of the person
         /// <para>Se requiere sobrescribir con [DatabasePropertyInfo("Birthdate")]</para>
         /// </summary>
-        public virtual DateTime? Birthdate { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public virtual DateTime? Birthdate { get; set; }
 
         /// <summary>
         /// Year old of the person
@@ -33,9 +27,12 @@ namespace Gbso.App.Model.General
     }
 
     [Serializable]
-    public class PersonCollection<TPerson> : CollectionMaster<TPerson, long?> 
-    where TPerson: PersonModel
-    { }
-    
+    public class PersonCollection : CollectionMaster<PersonModel, long?> 
+    { 
+    }
+    public class PersonCollection<TPerson> : CollectionMaster<TPerson, long?>
+    where TPerson : PersonModel
+    { 
+    }
 }
 

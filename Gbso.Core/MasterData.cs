@@ -25,6 +25,9 @@ namespace Gbso.Core
 
         protected string SqlString { get; set; }
         protected SqlConnection SqlConnection { get; set; }
+        protected Type InstanceType { get; set; }
+
+        
 
         /// <summary>
         /// Constructor de cla clase
@@ -60,6 +63,7 @@ namespace Gbso.Core
             var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
             SqlString = entityDescriptionAttributes.StoredProcedure;
+            InstanceType = typeof(TEntity);
         }
 
         /// <summary>
@@ -81,7 +85,9 @@ namespace Gbso.Core
                 {
                     if (reader.Read())
                     {
-                        entity.Key = (TKey)Convert.ChangeType(reader[0], typeof(TKey));
+                        var value = reader[0];
+                        var type = typeof(TKey);
+                        entity.Key = value == DBNull.Value ? default : (TKey)Convert.ChangeType(value, Nullable.GetUnderlyingType(type) ?? type);
                     }
                 }
             }
@@ -380,14 +386,13 @@ namespace Gbso.Core
         /// <returns></returns>
         private object InitializeProperties(SqlDataReader sqlDataReader, List<object> columns, object instance)
         {
-            //((IEntityMaster)instance).ForceActionState(ActionStateEnum.Original);
-            Type instanceType = instance.GetType();
-            PropertyInfo propertyState = instanceType.BaseType.GetProperty("_actionState", BindingFlags.NonPublic | BindingFlags.Instance);
+            var propertyState = typeof(MasterModel<TKey>).GetProperty("_actionState", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
             propertyState.SetValue(instance, ActionStateEnum.Original);
+
             foreach (string[] item in columns.Where(c => c.GetType() == typeof(string[])))
             {
 
-                PropertyInfo property = instanceType.GetProperty(item.First());
+                PropertyInfo property = InstanceType.GetProperty(item.First());
                 object databaseValue;
                 try
                 {
@@ -424,7 +429,7 @@ namespace Gbso.Core
             {
                 foreach (string key in dictionary.Keys)
                 {
-                    PropertyInfo propertyInfo = instanceType.GetProperty(key);
+                    PropertyInfo propertyInfo = InstanceType.GetProperty(key);
                     Type propertyType = propertyInfo.GetMethod.ReturnType;
                     if (propertyType.GetNestedTypes().Contains(typeof(MasterModel<object>))) //Si implementa la interfaz tratar como entidad
                     {
@@ -447,7 +452,7 @@ namespace Gbso.Core
         private void EntityPropertiesToParameterCollection(ref SqlParameterCollection parameters, TEntity entity)
         {
             //var z = typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(n => n.Name).ToArray();
-            foreach (PropertyInfo propertyInfo in typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            foreach (PropertyInfo propertyInfo in InstanceType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 foreach (Attribute Attribute in Attribute.GetCustomAttributes(propertyInfo, true))
                 {
