@@ -62,9 +62,11 @@
   <ItemGroup>
     <Build Include="General\Person.sql" />
     <Build Include="Schemas\General.sql" />
-    <Build Include="General\IdType.sql" />
-    <none Include="General\IdTypePostDeployment.sql" />
+    <Build Include="General\IdTypeNaturalPerson.sql" />
+    <none Include="General\IdTypeNaturalPersonPostDeployment.sql" />
     <Build Include="General\Person_Crud.sql" />
+    <Build Include="General\NaturalPerson.sql" />
+    <Build Include="General\NaturalPerson_Crud.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Gbso.App.Mssql.refactorlog" />

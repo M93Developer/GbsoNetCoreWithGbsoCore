@@ -1,4 +1,4 @@
-﻿CREATE TABLE [General].[IdType]
+﻿CREATE TABLE [General].[IdTypeNaturalPerson]
 (
 	[Key] SMALLINT NOT NULL PRIMARY KEY,
 	[Code] VARCHAR(10) NOT NULL,

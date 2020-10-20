@@ -5,7 +5,7 @@ Plantilla de script posterior a la implementación
  Inserta o Actualiza datos estáticos
 --------------------------------------------------------------------------------------
 */
-merge [General].[IdType] as [target]
+merge [General].[IdTypeNaturalPerson] as [target]
 using (
     values 
     (1, 'RC', 'R.C.', 'Registro Cibil'),
