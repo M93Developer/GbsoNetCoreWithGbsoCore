@@ -31,20 +31,32 @@ namespace Gbso.Core
         /// </summary>
         protected MasterData()
         {
-            if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
-            var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
-            if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = entityDescriptionAttributes.StoredProcedure;
+            OpenConnection();
         }
       
         /// <summary>
         /// Constructor de la clase que recive una conexión
         /// </summary>
         /// <param name="sqlConnection"></param>
-        protected MasterData(SqlConnection sqlConnection)
+        public MasterData(SqlConnection sqlConnection)
         {
             this.SqlConnection = sqlConnection;
-            if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
+            OpenConnection();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="sqlConnectionString">Cadena de conexión</param>
+        public MasterData(string sqlConnectionString)
+        {
+            this.SqlConnection = new SqlConnection(sqlConnectionString);
+            OpenConnection();
+        }
+
+        private void OpenConnection()
+        {
+            if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
             var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
             if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
             SqlString = entityDescriptionAttributes.StoredProcedure;
@@ -65,9 +77,15 @@ namespace Gbso.Core
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Set);
                 var param = sqlCommand.Parameters;
                 EntityPropertiesToParameterCollection(ref param, entity);
-                string sKey = Convert.ToString(sqlCommand.ExecuteScalar());
-                return string.IsNullOrEmpty(sKey) ? default(TKey) : (TKey)Convert.ChangeType(sKey, typeof(TKey));
+                using (var reader = sqlCommand.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        entity.Key = (TKey)Convert.ChangeType(reader[0], typeof(TKey));
+                    }
+                }
             }
+            return entity.Key;
         }
 
         /// <summary>
@@ -375,7 +393,7 @@ namespace Gbso.Core
                 {
                     var res = sqlDataReader[item[1]];
                     var w2 = res.GetType();
-                    databaseValue = sqlDataReader[item[1]].GetType().Equals(typeof(System.Byte[])) ? sqlDataReader[item[1]] : sqlDataReader[item[1]] is DBNull ? null : sqlDataReader[item[1]]; //Valor obtenido de la base de datos
+                    databaseValue = sqlDataReader[item[1]] is DBNull ? null : sqlDataReader[item[1]]; //Valor obtenido de la base de datos
                 }
                 catch (Exception)
                 {
@@ -428,9 +446,10 @@ namespace Gbso.Core
         /// <param name="entity">Entidad u objeto del cual se obtienen los parámetros</param>
         private void EntityPropertiesToParameterCollection(ref SqlParameterCollection parameters, TEntity entity)
         {
-            foreach (PropertyInfo propertyInfo in entity.GetType().GetProperties())
+            //var z = typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(n => n.Name).ToArray();
+            foreach (PropertyInfo propertyInfo in typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                foreach (Attribute Attribute in Attribute.GetCustomAttributes(propertyInfo))
+                foreach (Attribute Attribute in Attribute.GetCustomAttributes(propertyInfo, true))
                 {
                     if (Attribute.GetType() == typeof(DatabasePropertyInfo) && ((DatabasePropertyInfo)Attribute).TypeColumn != SqlTypesColumn.AppController)
                     {
