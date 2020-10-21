@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Gbso.Core.Attributes
 {
-    public class DatabasePropertyInfo : Attribute
+    public class PropertyToDBColumn : Attribute
     {
         /// <summary>
         /// Column name in database
@@ -27,7 +27,7 @@ namespace Gbso.Core.Attributes
         /// <param name="columnName">Column name in the database</param>
         /// <param name="typeColumn">Column type in the database</param>
         /// <param name="isUniqueIndex">Indicates if is an unique index</param>
-        public DatabasePropertyInfo(string columnName, SqlTypesColumn typeColumn = SqlTypesColumn.Default, bool isUniqueIndex = false)
+        public PropertyToDBColumn(string columnName, SqlTypesColumn typeColumn = SqlTypesColumn.Default, bool isUniqueIndex = false)
         {
             this.ColumnName = columnName;
             this.TypeColumn = typeColumn;
@@ -36,9 +36,9 @@ namespace Gbso.Core.Attributes
     }
 
     /// <summary>
-    /// Entity description with references to the database
+    /// Model description with references to the database
     /// </summary>
-    public class DatabaseEntityInfo : Attribute
+    public class ModelToDataBase : Attribute
     {
         /// <summary>
         /// Table name in database
@@ -55,7 +55,7 @@ namespace Gbso.Core.Attributes
         /// </summary>
         /// <param name="tableName">Indica el nombre de la tabla en base de datos asociada a la clase</param>
         /// <param name="storedProcedure">Indica el nombre del procedimiento almacenado asociado a la clase</param>
-        public DatabaseEntityInfo(string tableName, string storedProcedure)
+        public ModelToDataBase(string tableName, string storedProcedure)
         {
             this.TableName = tableName;
             this.StoredProcedure = storedProcedure;
@@ -66,7 +66,7 @@ namespace Gbso.Core.Attributes
     /// <summary>
     /// Enum descripcion with references to the database
     /// </summary>
-    public class DatabaseEnumInfo : Attribute
+    public class EnumDataBase : Attribute
     {
         /// <summary>
         /// Table name in database
@@ -77,7 +77,7 @@ namespace Gbso.Core.Attributes
         /// Consutructor with table name
         /// </summary>
         /// <param name="tableName">table name</param>
-        public DatabaseEnumInfo(string tableName)
+        public EnumDataBase(string tableName)
         {
             this.TableName = tableName;
         }

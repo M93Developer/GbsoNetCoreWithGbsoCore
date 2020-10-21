@@ -7,7 +7,7 @@ using Gbso.Core.Attributes;
 namespace Gbso.App.Model.General
 {
     [Serializable]
-    [DatabaseEntityInfo("VirtualPerson", "VirtualPerson_Crud")]
+    [ModelToDataBase("VirtualPerson", "VirtualPerson_Crud")]
     public class VirtualPersonModel : PersonModel, IPersonModel<IdTypesVirtualPerson?>
     {
         /// <summary>
@@ -24,7 +24,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Name of System
         /// </summary>
-        [DatabasePropertyInfo("NameSystem")]
+        [PropertyToDBColumn("NameSystem")]
         public string NameSystem { get; set; }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Gbso.App.Model.General
     [Serializable]
     public class VirtualPersons : PersonCollection<VirtualPersonModel> { }
 
-    [DatabaseEnumInfo("IdTypeVirtualPerson")]
+    [EnumDataBase("IdTypeVirtualPerson")]
     public enum IdTypesVirtualPerson
     {
         [EnumDescription("WApp", "Web Applicaction")]

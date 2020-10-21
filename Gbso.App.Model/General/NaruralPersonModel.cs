@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace Gbso.App.Model.General
 {
     [Serializable]
-    [DatabaseEntityInfo("General.NaturalPerson", "General.NaturalPerson_Crud")]
+    [ModelToDataBase("General.NaturalPerson", "General.NaturalPerson_Crud")]
     public class NaturalPersonModel : PersonModel , IPersonModel<IdTypeNaturalPerson?>
     {
         /// <summary>
@@ -17,21 +17,21 @@ namespace Gbso.App.Model.General
         /// </summary>
         [Display(Name = "Id Type")]
         [Required]
-        [DatabasePropertyInfo("IdType")]
+        [PropertyToDBColumn("IdType")]
         public IdTypeNaturalPerson? IdType { get; set; }
 
         /// <summary>
         /// Identification number of a person
         /// </summary>
         [Required]
-        [DatabasePropertyInfo("Identification")]
+        [PropertyToDBColumn("Identification")]
         public string Identification { get; set; }
 
         /// <summary>
         /// Birthdate of the person
         /// </summary>
         [Required]
-        [DatabasePropertyInfo("Birthdate")]
+        [PropertyToDBColumn("Birthdate")]
         public override DateTime? Birthdate { get; set; }
 
         /// <summary>
@@ -39,14 +39,14 @@ namespace Gbso.App.Model.General
         /// </summary>
         [Required]
         [Display(Name = "First Name")]
-        [DatabasePropertyInfo("FirstName")]
+        [PropertyToDBColumn("FirstName")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// second name
         /// </summary>
         [Display(Name = "Second Name")]
-        [DatabasePropertyInfo("SecondName")]
+        [PropertyToDBColumn("SecondName")]
         public string SecondName { get; set; }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace Gbso.App.Model.General
         /// </summary>
         [Required]
         [Display(Name = "First Surname")]
-        [DatabasePropertyInfo("FirstSurname")]
+        [PropertyToDBColumn("FirstSurname")]
         public string FirstSurname { get; set; }
 
         /// <summary>
         /// Second surname
         /// </summary>
         [Display(Name = "Second Surname")]
-        [DatabasePropertyInfo("SecondSurname")]
+        [PropertyToDBColumn("SecondSurname")]
         public string SecondSurname { get; set; }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace Gbso.App.Model.General
         /// </summary>
         [Required]
         [Display(Name = "Blood Type")]
-        [DatabasePropertyInfo("BloodType")]
+        [PropertyToDBColumn("BloodType")]
         public BloodType? BloodType { get; set; }
 
         /// <summary>
         /// Type RH of person
         /// </summary>
         [Required]
-        [DatabasePropertyInfo("Rh")]
+        [PropertyToDBColumn("Rh")]
         public RhType? Rh { get; set; }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Gbso.App.Model.General
     { 
     }
 
-    [DatabaseEnumInfo("IdTypeNaturalPerson")]
+    [EnumDataBase("IdTypeNaturalPerson")]
     public enum IdTypeNaturalPerson
     {
         [EnumDescription("R.C.", "Registro Cibil")]
@@ -107,7 +107,7 @@ namespace Gbso.App.Model.General
         VCOD = 6
     }
 
-    [DatabaseEnumInfo("BloodType")]
+    [EnumDataBase("BloodType")]
     public enum BloodType
     {
         [EnumDescription("O")]
@@ -120,7 +120,7 @@ namespace Gbso.App.Model.General
         AB = 4,
     }
 
-    [DatabaseEnumInfo("EnumTypesRhPerson")]
+    [EnumDataBase("EnumTypesRhPerson")]
     public enum RhType
     {
         [EnumDescription("+")]

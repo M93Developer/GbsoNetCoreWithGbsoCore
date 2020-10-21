@@ -17,33 +17,33 @@ namespace Gbso.Core.Model
         /// 
         /// </summary>
         [Key]
-        [DatabasePropertyInfo("Key", SqlTypesColumn.PrimaryKey)]
+        [PropertyToDBColumn("Key", SqlTypesColumn.PrimaryKey)]
         public TKey Key { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("State", SqlTypesColumn.Default)]
+        [PropertyToDBColumn("State", SqlTypesColumn.Default)]
         public ModelEstate? State { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("TimeStamp", SqlTypesColumn.Marker)]
+        [PropertyToDBColumn("TimeStamp", SqlTypesColumn.Marker)]
         public byte[] TimeStamp { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("UserLastChange", SqlTypesColumn.ForeignKey)]
+        [PropertyToDBColumn("UserLastChange", SqlTypesColumn.ForeignKey)]
         public IUserModel<TKey> UserLastChange { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("IpLastChange")]
+        [PropertyToDBColumn("IpLastChange")]
         public string IpLastChange { get; set; }
         private ActionStateEnum? _actionState { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("ActionStatee", SqlTypesColumn.AppController)]
+        [PropertyToDBColumn("ActionStatee", SqlTypesColumn.AppController)]
         public ActionStateEnum? ActionState
         {
             get => this._actionState;
@@ -98,14 +98,14 @@ namespace Gbso.Core.Model
         /// <summary>
         /// Compara el objeto con el objeto enviado si ambos tiene Keys Numericos
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        int IComparable<MasterModel<TKey>>.CompareTo(MasterModel<TKey> entity)
+        int IComparable<MasterModel<TKey>>.CompareTo(MasterModel<TKey> model)
         {
             try
             {
                 var a = Convert.ToInt64(this.Key);
-                var b = Convert.ToInt64(entity.Key);
+                var b = Convert.ToInt64(model.Key);
                 if (b < a) return -1;
                 if (b > a) return 1;
                 return 0;
@@ -120,11 +120,11 @@ namespace Gbso.Core.Model
         /// <summary>
         /// Valida si el objeto es igual al Objeto enviado
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        bool IEquatable<MasterModel<TKey>>.Equals(MasterModel<TKey> entity)
+        bool IEquatable<MasterModel<TKey>>.Equals(MasterModel<TKey> model)
         {
-            if (this.Key.Equals(entity.Key)) return true;
+            if (this.Key.Equals(model.Key)) return true;
             return false;
         }
         /// <summary>

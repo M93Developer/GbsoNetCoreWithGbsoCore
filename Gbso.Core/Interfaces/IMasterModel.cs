@@ -5,7 +5,7 @@ using System.Collections;
 namespace Gbso.Core.Interfaces
 {
     /// <summary>
-    /// EntityMasters Interface
+    /// ModelMasters Interface
     /// </summary>
     public interface IMasterModel<TKey> //:IDisposable
     {

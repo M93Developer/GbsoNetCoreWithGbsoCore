@@ -7,10 +7,10 @@ namespace Gbso.Core.Model
     ///// Coleccioón Maestra
     ///// </summary>
     ///// <typeparam name="TypeKey">Recibe el tipo de la llave primaria</typeparam>
-    //public class CollectionMaster<TEntity, TKey> : IList<TEntity> 
-    //    where TEntity : EntityMaster<TKey>
+    //public class CollectionMaster<TModel, TKey> : IList<TModel> 
+    //    where TModel : ModelMaster<TKey>
     //{
-    //    private TEntity[] Array;
+    //    private TModel[] Array;
 
     //    #region Varibles ICollection
 
@@ -24,7 +24,7 @@ namespace Gbso.Core.Model
 
     //    public bool IsReadOnly { get; }
 
-    //    public TEntity this[int index] { get => ((IList<TEntity>)Array)[index]; set => ((IList<TEntity>)Array)[index] = value; }
+    //    public TModel this[int index] { get => ((IList<TModel>)Array)[index]; set => ((IList<TModel>)Array)[index] = value; }
 
     //    #endregion
 
@@ -32,15 +32,15 @@ namespace Gbso.Core.Model
     //    /// Constructor de la clase
     //    /// </summary>
     //    public CollectionMaster() {
-    //        Array = new TEntity[0];
-    //        var x = new List<TEntity>();
+    //        Array = new TModel[0];
+    //        var x = new List<TModel>();
     //    }
 
     //    /// <summary>
     //    /// Constructor de la Entidad
     //    /// </summary>
     //    /// <param name="array"></param>
-    //    CollectionMaster(TEntity[] array) {
+    //    CollectionMaster(TModel[] array) {
     //        this.Array = array;
     //    }
 
@@ -49,12 +49,12 @@ namespace Gbso.Core.Model
     //    /// </summary>
     //    /// <param name="index"></param>
     //    /// <returns></returns>
-    //    public TEntity GetByIndex(int index)
+    //    public TModel GetByIndex(int index)
     //    {
     //        if (Array.Length <= 0 || Array.Length < index) throw new System.OverflowException("Indice no encontrado");
     //        int NewLength = Array.Length - 1;
-    //        TEntity[] NewArray = new TEntity[NewLength];
-    //        return (TEntity) Array[index];
+    //        TModel[] NewArray = new TModel[NewLength];
+    //        return (TModel) Array[index];
     //    }
 
     //    /// <summary>
@@ -62,11 +62,11 @@ namespace Gbso.Core.Model
     //    /// </summary>
     //    /// <param name="key"></param>
     //    /// <returns></returns>
-    //    public TEntity GetByKey(TKey key)
+    //    public TModel GetByKey(TKey key)
     //    {
     //        for (int i = 0; i < Array.Length; i++)
     //        {
-    //            if (Array[i].Key.Equals(key)) return (TEntity) Array[i];
+    //            if (Array[i].Key.Equals(key)) return (TModel) Array[i];
     //        }
     //        throw new System.OverflowException("Key no encontrado");
     //    }
@@ -78,7 +78,7 @@ namespace Gbso.Core.Model
     //    public void Remove(int index)
     //    {
     //        if (index < 0 || Array.Length < index) throw new System.OverflowException("Indice fuera de rango");
-    //        var newArray = new TEntity[Array.Length - 1];
+    //        var newArray = new TModel[Array.Length - 1];
     //        for (int i = 0, c = 0; i < Array.Length - 1; i++)
     //        {
     //            if (i != index)
@@ -100,7 +100,7 @@ namespace Gbso.Core.Model
     //        {
     //            if (Array[i].Key.Equals(key))
     //            {
-    //                var newArray = new TEntity[Array.Length - 1];
+    //                var newArray = new TModel[Array.Length - 1];
     //                for (int e = 0, c = 0; e < Array.Length - 1; e++)
     //                {
     //                    if (e != i)
@@ -118,18 +118,18 @@ namespace Gbso.Core.Model
     //    /// <summary>
     //    /// Adiciona el objeto enviado a la colección
     //    /// </summary>
-    //    /// <param name="entity"></param>
-    //    public void Add(TEntity entity)
+    //    /// <param name="model"></param>
+    //    public void Add(TModel model)
     //    {
     //        try
     //        {
     //            int NewLength = Array.Length + 1;
-    //            TEntity[] NewArray = new TEntity[NewLength];
+    //            TModel[] NewArray = new TModel[NewLength];
     //            for (int i = 0; i < Array.Length; i++)
     //            {
-    //                NewArray[i] = (TEntity)Array[i];
+    //                NewArray[i] = (TModel)Array[i];
     //            }
-    //            NewArray[NewLength-1] = entity;
+    //            NewArray[NewLength-1] = model;
     //            Array = NewArray;
     //        }
     //        catch (OverflowException)
@@ -142,22 +142,22 @@ namespace Gbso.Core.Model
     //        }
     //    }
 
-    //    public void Create(TEntity entity)
+    //    public void Create(TModel model)
     //    {
-    //        entity.ActionState = ActionStateEnum.Created;
-    //        Add(entity);
+    //        model.ActionState = ActionStateEnum.Created;
+    //        Add(model);
     //    }
 
     //    public void Clear()
     //    {
-    //        Array = new TEntity[0];
+    //        Array = new TModel[0];
     //    }
 
-    //    public bool Contains(TEntity entity)
+    //    public bool Contains(TModel model)
     //    {
     //        for (int i = 0; i < Array.Length - 1; i++)
     //        {
-    //            if (Array[i].Equals(entity))
+    //            if (Array[i].Equals(model))
     //            {
     //                return true;
     //            }
@@ -165,7 +165,7 @@ namespace Gbso.Core.Model
     //        return false;
     //    }
 
-    //    public void CopyTo(TEntity[] array, int arrayIndex)
+    //    public void CopyTo(TModel[] array, int arrayIndex)
     //    {
     //        if (arrayIndex < 0) throw new ArgumentOutOfRangeException("arrayIndex es menor que 0");
     //        if (array == null) throw new ArgumentNullException("El valor de array es null.");
@@ -177,14 +177,14 @@ namespace Gbso.Core.Model
     //        }
     //    }
 
-    //    public bool Remove(TEntity Entity)
+    //    public bool Remove(TModel Model)
     //    {
     //        var controller = false;
     //        for (int i = 0; i < Array.Length - 1; i++)
     //        {
-    //            if (Array[i].Equals(Entity))
+    //            if (Array[i].Equals(Model))
     //            {
-    //                var newArray = new TEntity[Array.Length - 1];
+    //                var newArray = new TModel[Array.Length - 1];
     //                for (int e = 0, c = 0; e < Array.Length - 1; e++)
     //                {
     //                    if (e != i)
@@ -202,30 +202,30 @@ namespace Gbso.Core.Model
     //    IEnumerator IEnumerable.GetEnumerator()
     //    {
     //        //Instanciamos el enumerador tipado y lo devolvemos
-    //        //return (new CollectionMasterEnumerator<EntityMaster<TKey>>(Array) as IEnumerator<TEntity>);
-    //        return ((ICollection<TEntity>)Array).GetEnumerator();
+    //        //return (new CollectionMasterEnumerator<ModelMaster<TKey>>(Array) as IEnumerator<TModel>);
+    //        return ((ICollection<TModel>)Array).GetEnumerator();
     //    }
 
-    //    IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator()
+    //    IEnumerator<TModel> IEnumerable<TModel>.GetEnumerator()
     //    {
     //        //Instanciamos el enumerador tipado y lo devolvemos
-    //        //return (new CollectionMasterEnumerator<EntityMaster<TKey>>(Array) as IEnumerator<TEntity>);
-    //        return ((ICollection<TEntity>)Array).GetEnumerator();
+    //        //return (new CollectionMasterEnumerator<ModelMaster<TKey>>(Array) as IEnumerator<TModel>);
+    //        return ((ICollection<TModel>)Array).GetEnumerator();
     //    }
 
-    //    public int IndexOf(TEntity entity)
+    //    public int IndexOf(TModel model)
     //    {
-    //        return ((IList<TEntity>)Array).IndexOf(entity);
+    //        return ((IList<TModel>)Array).IndexOf(model);
     //    }
 
-    //    public void Insert(int index, TEntity entity)
+    //    public void Insert(int index, TModel model)
     //    {
-    //        ((IList<TEntity>)Array).Insert(index, entity);
+    //        ((IList<TModel>)Array).Insert(index, model);
     //    }
 
     //    public void RemoveAt(int index)
     //    {
-    //        ((IList<TEntity>)Array).RemoveAt(index);
+    //        ((IList<TModel>)Array).RemoveAt(index);
     //    }
     //}
 
@@ -233,12 +233,12 @@ namespace Gbso.Core.Model
     ///// Enumerador de la clase Collection
     ///// Se usa el enumerador de Array
     ///// </summary>
-    ///// <typeparam name="TEntity"></typeparam>
-    //public class CollectionMasterEnumerator<TEntity> : IEnumerator<TEntity>  where TEntity : IEntityMaster
+    ///// <typeparam name="TModel"></typeparam>
+    //public class CollectionMasterEnumerator<TModel> : IEnumerator<TModel>  where TModel : IModelMaster
     //{
-    //    private TEntity[] Array;
+    //    private TModel[] Array;
     //    private long posicion = -1;
-    //    public CollectionMasterEnumerator(TEntity[] Array)
+    //    public CollectionMasterEnumerator(TModel[] Array)
     //    {
     //        this.Array = Array;
     //    }
@@ -263,7 +263,7 @@ namespace Gbso.Core.Model
     //        }
     //    }
 
-    //    TEntity IEnumerator<TEntity>.Current
+    //    TModel IEnumerator<TModel>.Current
     //    {
     //        get
     //        {
@@ -314,11 +314,11 @@ namespace Gbso.Core.Model
         //    /// <summary>
         //    /// Agrega nuevo objeto para ser registrado en base de datos
         //    /// </summary>
-        //    /// <param name="entity">Entidad objeto u objeto a registrar</param>
-        //    public void Create(TEntity entity)
+        //    /// <param name="model">Entidad objeto u objeto a registrar</param>
+        //    public void Create(TModel model)
         //    {
-        //        entity.ActionState = ActionStateEnum.Created;
-        //        Add(entity);
+        //        model.ActionState = ActionStateEnum.Created;
+        //        Add(model);
         //    }
     }
 }

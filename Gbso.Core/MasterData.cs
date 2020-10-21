@@ -15,12 +15,12 @@ namespace Gbso.Core
     /// <summary>
     /// Clase maestra que se encarga de negociar con la base de datos y de persistir los datos según según los tipos de datos indicados
     /// </summary>
-    /// <typeparam name="TEntity">Tipo de entidad</typeparam>
+    /// <typeparam name="TModel">Tipo de entidad</typeparam>
     /// <typeparam name="TKey">Tipo de llave primaria de la entidad</typeparam>
     /// <typeparam name="TCollection">Tipo de colección de la entidad</typeparam>
-    public class MasterData<TEntity, TKey, TCollection> : IMasterData<TEntity, TKey, TCollection>, IDisposable
-        where TEntity : MasterModel<TKey>, new()
-        where TCollection : CollectionMaster<TEntity, TKey>, new()
+    public class MasterData<TModel, TKey, TCollection> : IMasterData<TModel, TKey, TCollection>, IDisposable
+        where TModel : MasterModel<TKey>, new()
+        where TCollection : CollectionMaster<TModel, TKey>, new()
     {
 
         protected string SqlString { get; set; }
@@ -60,18 +60,18 @@ namespace Gbso.Core
         private void OpenConnection()
         {
             if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
-            var entityDescriptionAttributes = (DatabaseEntityInfo)typeof(TEntity).GetCustomAttribute(typeof(DatabaseEntityInfo));
-            if (entityDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = entityDescriptionAttributes.StoredProcedure;
-            InstanceType = typeof(TEntity);
+            var modelDescriptionAttributes = (ModelToDataBase)typeof(TModel).GetCustomAttribute(typeof(ModelToDataBase));
+            if (modelDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
+            SqlString = modelDescriptionAttributes.StoredProcedure;
+            InstanceType = typeof(TModel);
         }
 
         /// <summary>
         /// Registra un objeto en la base de datos y devuelve su identificador
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public TKey Set(TEntity entity)
+        public TKey Set(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -80,44 +80,44 @@ namespace Gbso.Core
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Set);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
+                ModelPropertiesToParameterCollection(ref param, model);
                 using (var reader = sqlCommand.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         var value = reader[0];
                         var type = typeof(TKey);
-                        entity.Key = value == DBNull.Value ? default : (TKey)Convert.ChangeType(value, Nullable.GetUnderlyingType(type) ?? type);
+                        model.Key = value == DBNull.Value ? default : (TKey)Convert.ChangeType(value, Nullable.GetUnderlyingType(type) ?? type);
                     }
                 }
             }
-            return entity.Key;
+            return model.Key;
         }
 
         /// <summary>
         /// Registra un objeto en la base de datos y devuelve dicho objeto sincronizado
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public TEntity SetAndReturnModel(TEntity entity)
+        public TModel SetAndReturnModel(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
-                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.RegisterAndReturnEntity);
+                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.RegisterAndReturnModel);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
-                return SqlDataRederToEntity(sqlCommand.ExecuteReader());
+                ModelPropertiesToParameterCollection(ref param, model);
+                return SqlDataRederToModel(sqlCommand.ExecuteReader());
             }
         }
 
         /// <summary>
         /// Elimina los objetos que tengan las mismas propiedades del objeto envíado
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns>Número de registros afectados</returns>
-        public int Delete(TEntity entity)
+        public int Delete(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -125,7 +125,7 @@ namespace Gbso.Core
                 sqlCommand.CommandText = SqlString;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Delete);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
+                ModelPropertiesToParameterCollection(ref param, model);
                 return sqlCommand.ExecuteNonQuery();
             }
         }
@@ -137,7 +137,7 @@ namespace Gbso.Core
         /// <returns></returns>
         public int Delete(TKey key)
         {
-            return Delete(new TEntity() { Key = key });
+            return Delete(new TModel() { Key = key });
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public TEntity Get(TKey key)
+        public TModel Get(TKey key)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -155,7 +155,7 @@ namespace Gbso.Core
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Get);
                 sqlCommand.Parameters.AddWithValue("@Key", key);
                 var param = sqlCommand.Parameters;
-                return SqlDataRederToEntity(sqlCommand.ExecuteReader());
+                return SqlDataRederToModel(sqlCommand.ExecuteReader());
             }
         }
 
@@ -165,15 +165,15 @@ namespace Gbso.Core
         /// <returns></returns>
         public TCollection Get()
         {
-            return Get(new TEntity());
+            return Get(new TModel());
         }
 
         /// <summary>
         /// Devuelve una colección de objetos de la base de datos que tengan los mismo parámetros del objeto envíado
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public TCollection Get(TEntity entity)
+        public TCollection Get(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -182,17 +182,17 @@ namespace Gbso.Core
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Get);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
-                return SqlDataRederToEntityCollection(sqlCommand.ExecuteReader());
+                ModelPropertiesToParameterCollection(ref param, model);
+                return SqlDataRederToModelCollection(sqlCommand.ExecuteReader());
             }
         }
 
         /// <summary>
         /// Actunaliza un objeto en la base de datos
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public int Update(TEntity entity)
+        public int Update(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
@@ -201,7 +201,7 @@ namespace Gbso.Core
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Update);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
+                ModelPropertiesToParameterCollection(ref param, model);
                 return sqlCommand.ExecuteNonQuery();
             }
         }
@@ -209,19 +209,19 @@ namespace Gbso.Core
         /// <summary>
         /// Actualiza el objeto en la base de datos y devuelve el mismo objeto sincronizado
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public TEntity UpdateAndReturnModel(TEntity entity)
+        public TModel UpdateAndReturnModel(TModel model)
         {
             using (var sqlCommand = new SqlCommand())
             {
                 sqlCommand.Connection = SqlConnection;
                 sqlCommand.CommandText = SqlString;
                 sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.UpdateAndReturnEntity);
+                sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.UpdateAndReturnModel);
                 var param = sqlCommand.Parameters;
-                EntityPropertiesToParameterCollection(ref param, entity);
-                return SqlDataRederToEntity(sqlCommand.ExecuteReader());
+                ModelPropertiesToParameterCollection(ref param, model);
+                return SqlDataRederToModel(sqlCommand.ExecuteReader());
             }
         }
 
@@ -238,11 +238,11 @@ namespace Gbso.Core
                 sqlCommand.CommandText = SqlString;
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 var updateCollectionResult = new UpdateCollectionResult();
-                foreach (TEntity Entity in collection.OrderBy(n => n.ActionState))
+                foreach (TModel Model in collection.OrderBy(n => n.ActionState))
                 {
                     var param = sqlCommand.Parameters;
-                    EntityPropertiesToParameterCollection(ref param, Entity);
-                    switch (Entity.ActionState)
+                    ModelPropertiesToParameterCollection(ref param, Model);
+                    switch (Model.ActionState)
                     {
                         case ActionStateEnum.Created:
                             sqlCommand.Parameters.AddWithValue("@Stp_Action", SqlAction.Set);
@@ -344,7 +344,7 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="sqlDataReader">SqlDataReader a persistir</param>
         /// <returns></returns>
-        private TCollection SqlDataRederToEntityCollection(SqlDataReader sqlDataReader)
+        private TCollection SqlDataRederToModelCollection(SqlDataReader sqlDataReader)
         {
             //Obtener nombre de propiedades y columnas Descrpcion_ReferenciaSubObjeto_ReferenciaObjeto
             var columns = new List<object>();
@@ -352,11 +352,11 @@ namespace Gbso.Core
             {
                 ValidarPartesColumna(ref columns, sqlDataReader.GetName(i));
             }
-            TCollection collection = new TCollection(); //Crear la collección de tipo especifico a devolver que hereda de CollectionMaster<TEntity, TKey>
-            PropertyInfo[] properties = typeof(TEntity).GetProperties(); //Obtener las propiedades de la entidad
+            TCollection collection = new TCollection(); //Crear la collección de tipo especifico a devolver que hereda de CollectionMaster<TModel, TKey>
+            PropertyInfo[] properties = typeof(TModel).GetProperties(); //Obtener las propiedades de la entidad
             while (sqlDataReader.Read()) //Recorrer los datos devueltos por sql
             {
-                collection.Add(InitializeProperties(sqlDataReader, columns, new TEntity()) as TEntity);
+                collection.Add(InitializeProperties(sqlDataReader, columns, new TModel()) as TModel);
             }
             return collection;
         }
@@ -366,7 +366,7 @@ namespace Gbso.Core
         /// </summary>
         /// <param name="sqlDataReder"></param>
         /// <returns></returns>
-        private TEntity SqlDataRederToEntity(SqlDataReader sqlDataReader)
+        private TModel SqlDataRederToModel(SqlDataReader sqlDataReader)
         {
             var columns = new List<object>();
             for (int i = 0; i < sqlDataReader.FieldCount; i++)
@@ -374,7 +374,7 @@ namespace Gbso.Core
                 ValidarPartesColumna(ref columns, sqlDataReader.GetName(i));
             }
             sqlDataReader.Read();
-            return InitializeProperties(sqlDataReader, columns, new TEntity()) as TEntity;
+            return InitializeProperties(sqlDataReader, columns, new TModel()) as TModel;
         }
 
         /// <summary>
@@ -448,18 +448,17 @@ namespace Gbso.Core
         /// Setea las propiedades de un ogjeto en parametros sql
         /// </summary>
         /// <param name="parameters">Parametros</param>
-        /// <param name="entity">Entidad u objeto del cual se obtienen los parámetros</param>
-        private void EntityPropertiesToParameterCollection(ref SqlParameterCollection parameters, TEntity entity)
+        /// <param name="model">Entidad u objeto del cual se obtienen los parámetros</param>
+        private void ModelPropertiesToParameterCollection(ref SqlParameterCollection parameters, TModel model)
         {
-            //var z = typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(n => n.Name).ToArray();
             foreach (PropertyInfo propertyInfo in InstanceType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 foreach (Attribute Attribute in Attribute.GetCustomAttributes(propertyInfo, true))
                 {
-                    if (Attribute.GetType() == typeof(DatabasePropertyInfo) && ((DatabasePropertyInfo)Attribute).TypeColumn != SqlTypesColumn.AppController)
+                    if (Attribute.GetType() == typeof(PropertyToDBColumn) && ((PropertyToDBColumn)Attribute).TypeColumn != SqlTypesColumn.AppController)
                     {
-                        var value = propertyInfo.GetValue(entity);
-                        if (value != null) parameters.AddWithValue("@" + ((DatabasePropertyInfo)Attribute).ColumnName , value);
+                        var value = propertyInfo.GetValue(model);
+                        if (value != null) parameters.AddWithValue("@" + ((PropertyToDBColumn)Attribute).ColumnName , value);
                     }
                 }
             }

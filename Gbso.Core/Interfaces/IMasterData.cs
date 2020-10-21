@@ -3,17 +3,17 @@ using Gbso.Core.Utils;
 
 namespace Gbso.Core.Interfaces
 {
-    public interface IMasterData<TEntity, TKey, TCollection> where TEntity : MasterModel<TKey> where TCollection : CollectionMaster<TEntity, TKey>
+    public interface IMasterData<TModel, TKey, TCollection> where TModel : MasterModel<TKey> where TCollection : CollectionMaster<TModel, TKey>
     {
-        TKey Set(TEntity entity);
-        TEntity SetAndReturnModel(TEntity entity);
-        TEntity Get(TKey key);
+        TKey Set(TModel model);
+        TModel SetAndReturnModel(TModel model);
+        TModel Get(TKey key);
         TCollection Get();
-        TCollection Get(TEntity entity);
-        int Update(TEntity entity);
-        int Delete(TEntity entity);
+        TCollection Get(TModel model);
+        int Update(TModel model);
+        int Delete(TModel model);
         int Delete(TKey key);
-        TEntity UpdateAndReturnModel(TEntity entity);
-        UpdateCollectionResult Update(TCollection collectionEntity);
+        TModel UpdateAndReturnModel(TModel model);
+        UpdateCollectionResult Update(TCollection collectionModel);
     }
 }

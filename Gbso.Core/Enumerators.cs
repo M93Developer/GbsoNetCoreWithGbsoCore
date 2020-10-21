@@ -25,8 +25,8 @@
         Get = 2,
         Update = 3,
         Delete = 4,
-        RegisterAndReturnEntity = 5,
-        UpdateAndReturnEntity = 6,
+        RegisterAndReturnModel = 5,
+        UpdateAndReturnModel = 6,
     }
 
     public enum SqlDefaultColumns

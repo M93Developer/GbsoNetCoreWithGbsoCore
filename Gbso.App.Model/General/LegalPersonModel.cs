@@ -7,43 +7,43 @@ using Gbso.Core.Attributes;
 namespace Gbso.App.Model.General
 {
     [Serializable]
-    [DatabaseEntityInfo("LegalPerson", "LegalPerson_Crud")]
+    [ModelToDataBase("LegalPerson", "LegalPerson_Crud")]
     public class LegalPerson : PersonModel, IPersonModel<IdTypesLegalPerson?>
     {
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("IdType")]
+        [PropertyToDBColumn("IdType")]
         public IdTypesLegalPerson? IdType { get; set; }
         
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("Identification")]
+        [PropertyToDBColumn("Identification")]
         public string Identification { get; set; }
         
         /// <summary>
         /// Short name
         /// </summary>
-        [DatabasePropertyInfo("ShortName")]
+        [PropertyToDBColumn("ShortName")]
         public string ShortName { get; set; }
 
         /// <summary>
         /// Name
         /// </summary>
-        [DatabasePropertyInfo("Name")]
+        [PropertyToDBColumn("Name")]
         public string BussinesName { get; set; }
 
         /// <summary>
         /// Second surname
         /// </summary>
-        [DatabasePropertyInfo("SecondSurname")]
+        [PropertyToDBColumn("SecondSurname")]
         public string SecondSurname { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DatabasePropertyInfo("Birthdate")]
+        [PropertyToDBColumn("Birthdate")]
         public override DateTime? Birthdate { get; set; }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Gbso.App.Model.General
     [Serializable]
     public class LegalPersonCollection : PersonCollection<LegalPerson> { }
 
-    [DatabaseEnumInfo("EnumTypesLegalPerson")]
+    [EnumDataBase("EnumTypesLegalPerson")]
     public enum IdTypesLegalPerson
     {
         [EnumDescription("S.A.", "Sociedad Anonima")]
