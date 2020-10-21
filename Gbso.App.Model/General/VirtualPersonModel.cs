@@ -30,7 +30,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Full name
         /// </summary>
-        public string Name { get => string.Format("{0}\n{1}", NameSystem, IdType.GetCode()); }
+        public string Name { get => string.Format("{0}\n{1}", NameSystem, IdType.GetShortDescription()); }
     }
 
     [Serializable]
@@ -39,9 +39,9 @@ namespace Gbso.App.Model.General
     [DatabaseEnumInfo("IdTypeVirtualPerson")]
     public enum IdTypesVirtualPerson
     {
-        [DatabaseItemEnumInfo("WApp", "Web Applicaction")]
+        [EnumDescription("WApp", "Web Applicaction")]
         SA = 1,
-        [DatabaseItemEnumInfo("Api", "Api")]
+        [EnumDescription("Api", "Api")]
         SAS = 2,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Gbso.Core.Enumerators;
 using System;
+using System.ComponentModel;
 
 namespace Gbso.Core.Attributes
 {
@@ -86,26 +87,20 @@ namespace Gbso.Core.Attributes
     /// <summary>
     /// Item enum description with
     /// </summary>
-    public class DatabaseItemEnumInfo : Attribute
+    public class EnumDescription : DescriptionAttribute
     {
         /// <summary>
         /// Code
         /// </summary>
-        public string Code { get; set; }
-
-        /// <summary>
-        /// Description
-        /// </summary>
-        public string Description { get; set; }
+        public string ShortDescription { get; set; }
 
         /// <summary>
         /// Consutructor with table name
         /// </summary>
         /// <param name="tableName">table name</param>
-        public DatabaseItemEnumInfo(string code, string description)
+        public EnumDescription(string shortDescription, string description = null): base(description)
         {
-            this.Code = code;
-            this.Description = description;
+            this.ShortDescription = shortDescription;
         }
 
     }

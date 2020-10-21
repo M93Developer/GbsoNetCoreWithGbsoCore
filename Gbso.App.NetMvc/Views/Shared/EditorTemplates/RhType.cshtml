@@ -1,0 +1,23 @@
+﻿@using Gbso.Core.Extensions
+@using Gbso.Core.Attributes
+@using Gbso.App.Model.General
+@model RhType?
+
+@{
+    var values = Enum.GetValues(typeof(RhType));
+    var name = @ViewData.TemplateInfo.GetFullHtmlFieldName("");
+    <select class="form-control" id="@name" name="@name">
+        <option></option>
+        @foreach (RhType value in values)
+        {
+            @if (Model == value)
+            {
+                <option value="@value.GetHashCode()" selected="selected">@value.ToString()</option>
+            }
+            else
+            {
+                <option value="@value.GetHashCode()">@value.ToString()</option>
+            }
+        }
+    </select>
+}

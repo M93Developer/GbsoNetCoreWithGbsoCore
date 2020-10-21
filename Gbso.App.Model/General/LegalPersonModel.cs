@@ -49,7 +49,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Full name
         /// </summary>
-        public string Name { get => string.Format("{0}\n{1}: {2}", BussinesName, IdType.GetCode(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
+        public string Name { get => string.Format("{0}\n{1}: {2}", BussinesName, IdType.GetShortDescription(), Identification).Replace(@"\s*(?!\S)", "").Trim(); }
         
     }
 
@@ -59,9 +59,9 @@ namespace Gbso.App.Model.General
     [DatabaseEnumInfo("EnumTypesLegalPerson")]
     public enum IdTypesLegalPerson
     {
-        [DatabaseItemEnumInfo("S.A.", "Sociedad Anonima")]
+        [EnumDescription("S.A.", "Sociedad Anonima")]
         SA = 1,
-        [DatabaseItemEnumInfo("S.A.S.", "Sociedad por Acción Simplificada")]
+        [EnumDescription("S.A.S.", "Sociedad por Acción Simplificada")]
         SAS = 2,
     }
 }

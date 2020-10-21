@@ -44,8 +44,13 @@ namespace Gbso.App.NetMvc
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "General",
+                    pattern: "{area=General}/{controller=NaturalPerson}/{action=Index}/{key?}");
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Person}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{key?}");
+
+
             });
         }
     }

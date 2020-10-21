@@ -1,0 +1,6 @@
+﻿@using Gbso.Core.Extensions
+@using Gbso.Core.Attributes
+@model Gbso.App.Model.General.BloodType?
+
+<span>@if (Model.HasValue)@Model.GetShortDescription())</span>
+

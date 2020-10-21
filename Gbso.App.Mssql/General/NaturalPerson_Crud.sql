@@ -7,7 +7,7 @@
 	@FirstSurname VARCHAR(50) = NULL,
 	@SecondSurname VARCHAR(50) = NULL,
 	@Birthdate DATETIME = NULL,
-	@TypeBlood SMALLINT = NULL,
+	@BloodType SMALLINT = NULL,
 	@Rh SMALLINT = NULL,
 	@TimeStamp TIMESTAMP = NULL,
 	@IpLastChange VARCHAR = NULL,
@@ -21,9 +21,9 @@ AS
 		SET @VALIDADOR = 1
 
 		INSERT INTO [General].[NaturalPerson] 
-		([Key], [IdType], [Identification], [FirstName], [SecondName], [FirstSurname], [SecondSurname], [Birthdate], [TypeBlood], [Rh], [IpLastChange], [UserLastChange])
+		([Key], [IdType], [Identification], [FirstName], [SecondName], [FirstSurname], [SecondSurname], [Birthdate], [BloodType], [Rh], [IpLastChange], [UserLastChange])
 		VALUES
-		(@Key, @IdType, @Identification, @FirstName, @SecondName, @FirstSurname, @SecondSurname, @Birthdate, @TypeBlood, @Rh, @IpLastChange, @UserLastChange)
+		(@Key, @IdType, @Identification, @FirstName, @SecondName, @FirstSurname, @SecondSurname, @Birthdate, @BloodType, @Rh, @IpLastChange, @UserLastChange)
 		
 		SELECT SCOPE_IDENTITY()
 	END
@@ -32,7 +32,7 @@ AS
 	BEGIN
 		SET @VALIDADOR = 1
 
-		select [Key], [IdType], [Identification], [FirstName], [SecondName], [FirstSurname], [SecondSurname], [Birthdate], [TypeBlood], [Rh], [IpLastChange], [UserLastChange]
+		select [Key], [IdType], [Identification], [FirstName], [SecondName], [FirstSurname], [SecondSurname], [Birthdate], [BloodType], [Rh], [IpLastChange], [UserLastChange]
 		from [General].[NaturalPerson]
 	END
 	--Update
@@ -48,7 +48,7 @@ AS
 			[FirstSurname] = @FirstSurname,
 			[SecondSurname] = @SecondSurname,
 			[Birthdate] = @Birthdate,
-			[TypeBlood] = @TypeBlood,
+			[BloodType] = @BloodType,
 			[Rh] = @Rh,
 			[IpLastChange] = @IpLastChange,
 			[UserLastChange] = @UserLastChange

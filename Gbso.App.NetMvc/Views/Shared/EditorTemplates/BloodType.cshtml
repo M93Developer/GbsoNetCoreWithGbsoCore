@@ -1,0 +1,8 @@
+﻿@using Gbso.Core.Extensions
+@using Gbso.App.Model.General
+@model BloodType?
+
+@{
+    var list = AppUtils.GetEnumSelectList(typeof(BloodType), e => e.GetShortDescription(), Model);
+}
+@Html.DropDownList(string.Empty, list, string.Empty, htmlAttributes: new { @class = "form-control" } )

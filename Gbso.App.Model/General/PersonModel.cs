@@ -4,6 +4,7 @@ using Gbso.Core.Model;
 using Gbso.Core.Extensions;
 using Gbso.Core.Attributes;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gbso.App.Model.General
 {
@@ -23,6 +24,7 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Year old of the person
         /// </summary>
+        [Display(Name = "Year Old")]
         public int? YearOld { get => Birthdate != null ? (new DateTime() + (DateTime.Now - Birthdate.Value.AddDays(1).AddYears(1))).Year : (int?)null; }
     }
 

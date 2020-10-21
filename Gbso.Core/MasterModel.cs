@@ -11,7 +11,7 @@ namespace Gbso.Core.Model
     /// </summary>
     /// <typeparam name="TypeKey">Recibe el tipo de la llave primaria</typeparam>
     [Serializable]
-    public class MasterModel<TKey> : IMasterModel<TKey>, IComparable<MasterModel<TKey>>, IEquatable<MasterModel<TKey>>, ICloneable
+    public abstract class MasterModel<TKey> : IMasterModel<TKey>, IComparable<MasterModel<TKey>>, IEquatable<MasterModel<TKey>>, ICloneable
     {
         /// <summary>
         /// 

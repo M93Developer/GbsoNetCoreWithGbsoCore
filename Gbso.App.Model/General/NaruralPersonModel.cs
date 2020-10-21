@@ -3,6 +3,8 @@ using Gbso.Core;
 using Gbso.Core.Model;
 using Gbso.Core.Extensions;
 using Gbso.Core.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace Gbso.App.Model.General
 {
@@ -13,56 +15,69 @@ namespace Gbso.App.Model.General
         /// <summary>
         /// Type identification of the person
         /// </summary>
+        [Display(Name = "Id Type")]
+        [Required]
         [DatabasePropertyInfo("IdType")]
         public IdTypeNaturalPerson? IdType { get; set; }
 
         /// <summary>
         /// Identification number of a person
         /// </summary>
+        [Required]
         [DatabasePropertyInfo("Identification")]
         public string Identification { get; set; }
 
         /// <summary>
         /// Birthdate of the person
         /// </summary>
+        [Required]
         [DatabasePropertyInfo("Birthdate")]
         public override DateTime? Birthdate { get; set; }
 
         /// <summary>
         /// first name
         /// </summary>
+        [Required]
+        [Display(Name = "First Name")]
         [DatabasePropertyInfo("FirstName")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// second name
         /// </summary>
+        [Display(Name = "Second Name")]
         [DatabasePropertyInfo("SecondName")]
         public string SecondName { get; set; }
 
         /// <summary>
         /// First surname
         /// </summary>
+        [Required]
+        [Display(Name = "First Surname")]
         [DatabasePropertyInfo("FirstSurname")]
         public string FirstSurname { get; set; }
 
         /// <summary>
         /// Second surname
         /// </summary>
+        [Display(Name = "Second Surname")]
         [DatabasePropertyInfo("SecondSurname")]
         public string SecondSurname { get; set; }
 
         /// <summary>
         /// Type blood of person
         /// </summary>
-        [DatabasePropertyInfo("TypeBlood")]
-        public BloodType TypeBlood { get; set; }
+        [Required]
+        [Display(Name = "Blood Type")]
+        [DatabasePropertyInfo("BloodType")]
+        public BloodType? BloodType { get; set; }
 
         /// <summary>
         /// Type RH of person
         /// </summary>
+        [Required]
         [DatabasePropertyInfo("Rh")]
-        public RhType Rh { get; set; }
+        public RhType? Rh { get; set; }
 
         /// <summary>
         /// Full name of person
@@ -78,40 +93,39 @@ namespace Gbso.App.Model.General
     [DatabaseEnumInfo("IdTypeNaturalPerson")]
     public enum IdTypeNaturalPerson
     {
-        [DatabaseItemEnumInfo("R.C.", "Registro Cibil")]
+        [EnumDescription("R.C.", "Registro Cibil")]
         RC = 1,
-        [DatabaseItemEnumInfo("T.I.", "Tarjeta de Identidad")]
+        [EnumDescription("T.I.", "Tarjeta de Identidad")]
         TI = 2,
-        [DatabaseItemEnumInfo("C.C.", "Cédula de Ciudadania")]
+        [EnumDescription("C.C.", "Cédula de Ciudadania")]
         CC = 3,
-        [DatabaseItemEnumInfo("N.I.T.", "Nit")]
+        [EnumDescription("N.I.T.", "Nit")]
         NIT = 4,
-        [DatabaseItemEnumInfo("P.T.", "Pasaporte")]
+        [EnumDescription("P.T.", "Pasaporte")]
         PT = 5,
-        [DatabaseItemEnumInfo("VCOD", "Virtual Cod")]
+        [EnumDescription("VCOD", "Virtual Cod")]
         VCOD = 6
     }
 
     [DatabaseEnumInfo("BloodType")]
     public enum BloodType
     {
-        [DatabaseItemEnumInfo("O", "O")]
+        [EnumDescription("O")]
         O = 1,
-        [DatabaseItemEnumInfo("A", "A")]
+        [EnumDescription("A")]
         A = 2,
-        [DatabaseItemEnumInfo("B", "B")]
+        [EnumDescription("B")]
         B = 3,
-        [DatabaseItemEnumInfo("B", "B")]
+        [EnumDescription("AB")]
         AB = 4,
-
     }
 
     [DatabaseEnumInfo("EnumTypesRhPerson")]
     public enum RhType
     {
-        [DatabaseItemEnumInfo("+", "+")]
+        [EnumDescription("+")]
         Positive = 1,
-        [DatabaseItemEnumInfo("-", "-")]
+        [EnumDescription("-")]
         Negative = 2,
     }
 

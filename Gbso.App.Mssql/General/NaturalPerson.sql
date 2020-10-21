@@ -8,7 +8,7 @@
     [FirstSurname] VARCHAR(50) NOT NULL,
     [SecondSurname] VARCHAR(50) NULL,
     [Birthdate] DATETIME NOT NULL,
-    [TypeBlood] SMALLINT NOT NULL,
+    [BloodType] SMALLINT NOT NULL,
     [Rh] SMALLINT NOT NULL,
     [TimeStamp] TIMESTAMP NOT NULL, 
     [IpLastChange] VARCHAR(50) NULL DEFAULT '0.0.0.0', 

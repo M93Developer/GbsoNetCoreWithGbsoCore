@@ -1,0 +1,6 @@
+﻿@using Gbso.Core.Extensions
+@using Gbso.Core.Attributes
+@model Gbso.App.Model.General.RhType?
+
+<span>@if (Model.HasValue)@Model.GetDescription()</span>
+
