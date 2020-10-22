@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gbso.App.Data\Gbso.App.Data.csproj" />
     <ProjectReference Include="..\Gbso.App.Model\Gbso.App.Model.csproj" />
+    <ProjectReference Include="..\Gbso.App.NetMvc\Gbso.App.NetMvc.csproj" />
   </ItemGroup>
 
 

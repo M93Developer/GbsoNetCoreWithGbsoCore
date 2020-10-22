@@ -20,8 +20,8 @@ namespace Gbso.App.Api.Controllers
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{key}")]
+        public string Get(int key)
         {
             return "value";
         }
@@ -33,14 +33,14 @@ namespace Gbso.App.Api.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{key}")]
+        public void Put(int key, [FromBody] string value)
         {
         }
 
         // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{key}")]
+        public void Delete(int key)
         {
         }
     }

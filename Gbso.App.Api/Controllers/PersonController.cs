@@ -13,7 +13,7 @@ namespace Gbso.App.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : AppController
+    public class PersonController : AppControllerBase
     {
         public PersonController(IConfiguration configuration) : base(configuration)
         {
@@ -21,12 +21,12 @@ namespace Gbso.App.Api.Controllers
 
         // GET: api/<PersonController>
         [HttpGet]
-        public IEnumerable<PersonModel> Get()
+        public PersonCollection Get()
         {
             var connection = new SqlConnection(MainConnectionString);
             var data = new PersonData(connection);
             var rt = data.Get();
-            return rt.ToArray();
+            return rt;
         }
 
         // GET api/<PersonController>/5
