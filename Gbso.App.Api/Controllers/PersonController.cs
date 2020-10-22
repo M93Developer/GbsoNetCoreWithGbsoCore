@@ -5,7 +5,7 @@ using Gbso.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
-using Gbso.Core.Utils;
+using Gbso.Core.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +19,7 @@ namespace Gbso.App.Api.Controllers
         {
         }
 
-        // GET: api/<PersonController>
+        // GET: api/<NaturalPersonController>
         [HttpGet]
         public PersonCollection Get()
         {
@@ -29,7 +29,7 @@ namespace Gbso.App.Api.Controllers
             return rt;
         }
 
-        // GET api/<PersonController>/5
+        // GET api/<NaturalPersonController>/5
         [HttpGet("{id}")]
         public PersonModel Get(long id)
         {
@@ -39,7 +39,7 @@ namespace Gbso.App.Api.Controllers
             return rt;
         }
 
-        // POST api/<PersonController>
+        // POST api/<NaturalPersonController>
         [HttpPost]
         public long? Post([FromBody] PersonModel person)
         {
@@ -50,7 +50,7 @@ namespace Gbso.App.Api.Controllers
             return rt;
         }
 
-        // PUT api/<PersonController>/5
+        // PUT api/<NaturalPersonController>/5
         [HttpPut("{id}")]
         public void Put([FromBody] PersonModel person)
         {
@@ -59,7 +59,7 @@ namespace Gbso.App.Api.Controllers
             var rt = data.Update(person);
         }
 
-        // DELETE api/<PersonController>/5
+        // DELETE api/<NaturalPersonController>/5
         [HttpDelete("{id}")]
         public void Delete(long id)
         {
@@ -68,7 +68,7 @@ namespace Gbso.App.Api.Controllers
             var rt = data.Delete(id);
         }
 
-        // Update collection api/<PersonController>/5
+        // Update collection api/<NaturalPersonController>/5
         [HttpDelete("{id}")]
         public UpdateCollectionResult Update([FromBody] PersonCollection persons)
         {

@@ -12,7 +12,7 @@ namespace Gbso.App.Model.General
     /// Clase base para el modelado de personas en el sistema
     /// </summary>
     [Serializable]
-    [ModelToDataBase("General.Person", "General.Person_Crud")]
+    [ModelToDataBase("General", "Person", "Person_Crud")]
     public class PersonModel : MasterModel<long?>
     {
         /// <summary>

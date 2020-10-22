@@ -7,7 +7,7 @@ using Gbso.Core.Attributes;
 namespace Gbso.App.Model.General
 {
     [Serializable]
-    [ModelToDataBase("VirtualPerson", "VirtualPerson_Crud")]
+    [ModelToDataBase("General", "VirtualPerson", "VirtualPerson_Crud")]
     public class VirtualPersonModel : PersonModel, IPersonModel<IdTypesVirtualPerson?>
     {
         /// <summary>

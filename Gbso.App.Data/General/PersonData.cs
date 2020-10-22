@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using Gbso.App.Model.General;
 using Microsoft.AspNetCore.Mvc;
+using Gbso.Core.Data;
 
 namespace Gbso.App.Data.General
 {

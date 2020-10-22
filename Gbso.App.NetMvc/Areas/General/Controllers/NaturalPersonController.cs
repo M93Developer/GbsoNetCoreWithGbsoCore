@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Gbso.App.Model.General;
 using Gbso.Core.Attributes;
@@ -35,6 +37,7 @@ namespace Gbso.App.NetMvc.Controllers
                 var json = await client.GetStringAsync(NaturalPersonUrl);
                 var persons = JsonConvert.DeserializeObject<NaturalPersonCollection>(json);
                 return View(persons);
+
             }
         }
 

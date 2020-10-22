@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace Gbso.App.Model.General
 {
     [Serializable]
-    [ModelToDataBase("General.NaturalPerson", "General.NaturalPerson_Crud")]
+    [ModelToDataBase("General", "NaturalPerson", "NaturalPerson_Crud")]
     public class NaturalPersonModel : PersonModel , IPersonModel<IdTypeNaturalPerson?>
     {
         /// <summary>
@@ -78,6 +78,8 @@ namespace Gbso.App.Model.General
         [Required]
         [PropertyToDBColumn("Rh")]
         public RhType? Rh { get; set; }
+
+        public ContactInformation Contact { get; set; }
 
         /// <summary>
         /// Full name of person

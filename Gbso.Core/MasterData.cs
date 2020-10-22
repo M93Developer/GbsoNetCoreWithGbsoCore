@@ -1,5 +1,4 @@
 ﻿using Gbso.Core.Model;
-using Gbso.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -9,8 +8,12 @@ using Gbso.Core.Enumerators;
 using System.Data;
 using Gbso.Core.Interfaces;
 using Gbso.Core.Attributes;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Serialization;
 
-namespace Gbso.Core
+namespace Gbso.Core.Data
 {
     /// <summary>
     /// Clase maestra que se encarga de negociar con la base de datos y de persistir los datos según según los tipos de datos indicados
@@ -26,8 +29,6 @@ namespace Gbso.Core
         protected string SqlString { get; set; }
         protected SqlConnection SqlConnection { get; set; }
         protected Type InstanceType { get; set; }
-
-        
 
         /// <summary>
         /// Constructor de cla clase
@@ -62,7 +63,7 @@ namespace Gbso.Core
             if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Closed) this.SqlConnection.Open();
             var modelDescriptionAttributes = (ModelToDataBase)typeof(TModel).GetCustomAttribute(typeof(ModelToDataBase));
             if (modelDescriptionAttributes == null) throw new Exception("La entidad no tiene descripciones de transancción");
-            SqlString = modelDescriptionAttributes.StoredProcedure;
+            SqlString = modelDescriptionAttributes.Schema+ "." + modelDescriptionAttributes.StoredProcedure;
             InstanceType = typeof(TModel);
         }
 
@@ -166,6 +167,61 @@ namespace Gbso.Core
         public TCollection Get()
         {
             return Get(new TModel());
+        }
+
+        public TCollection Get<TResult>(Expression<Func<TModel, TResult>> selector, Expression<Func<TModel, bool>> predicate)
+        {
+            string expBody = SelectExpressionToSelectSql(selector);
+            string preBody = WhereExpressionToWhereSql(predicate);
+            
+            return new TCollection();
+        }
+
+        private string SelectExpressionToSelectSql<TResult>(Expression<Func<TModel, TResult>> selector)
+        {
+            var modelType = typeof(TModel);
+            var att = (ModelToDataBase)modelType.GetCustomAttribute(typeof(ModelToDataBase), false);
+
+            string expBody = selector.Body.ToString();
+            expBody = Regex.Replace(expBody, @".*\((.*)\)", "$1");
+            expBody = Regex.Replace(expBody, @"( = )\w+",  "$1"+ att.TableName);
+            expBody = Regex.Replace(expBody, @"\w+ = ", "");
+            var a = expBody.Split(",").Select(e=> e.Split("."));
+            var pares = a.Where(e => e.Length == 2).ToList();
+            
+            foreach (var item in a.Where(i=> i.Length == 3))
+            {
+                var pType = modelType.GetProperty(item[1]).PropertyType;
+                if (Utils.IsSubclassOfRawGeneric(typeof(MasterModel<>), pType))
+                {
+                    var pAttr = (ModelToDataBase) pType.GetCustomAttribute(typeof(ModelToDataBase),false);
+                    var par = new string[2] { pAttr.TableName, item[2] + " AS " + item[1] + "_" + item[2] };
+                    pares.Add(par);
+                }
+            }
+            var columns = pares.Select(p => string.Join(".", p));
+            expBody = string.Join(",", string.Join(", ", columns));
+            expBody = Regex.Replace(expBody, @"(\w+)", "[$1]").Replace(" [AS] ", " AS "); 
+            return expBody;
+        }
+
+        private string WhereExpressionToWhereSql(Expression<Func<TModel, bool>> predicate)
+        {
+            string preBody = predicate.Body.ToString();
+            // Gives: ((x.Id > 5) AndAlso (x.Warranty != False))
+
+            var paramName = predicate.Parameters[0].Name;
+            var paramTypeName = predicate.Parameters[0].Type.Name;
+
+            // You could easily add "OrElse" and others...
+            preBody = preBody.Replace(paramName + ".", paramTypeName + ".")
+                             .Replace("AndAlso", "AND")
+                             .Replace("==", "=")
+                             .Replace("\"", "'")
+                             .Replace("OrElse", "OR");
+
+            preBody = Regex.Replace(preBody, @"Convert\((\w+\.\w+), Nullable`\d+\)", "$1");
+            return preBody;
         }
 
         /// <summary>
@@ -431,7 +487,8 @@ namespace Gbso.Core
                 {
                     PropertyInfo propertyInfo = InstanceType.GetProperty(key);
                     Type propertyType = propertyInfo.GetMethod.ReturnType;
-                    if (propertyType.GetNestedTypes().Contains(typeof(MasterModel<object>))) //Si implementa la interfaz tratar como entidad
+                    var pp = propertyType.GetNestedTypes().ToList();
+                    if (propertyType.GetNestedTypes().Contains(typeof(MasterModel<object>))) //Si extiene el modelo maestro tratar como modelo
                     {
                         var constructor = propertyType.GetConstructors();
                         var newInstanceBySubPropertyClass = propertyType.GetConstructors().FirstOrDefault().Invoke(new Object[] { });
@@ -471,4 +528,12 @@ namespace Gbso.Core
         }
 
     }
+
+    public class UpdateCollectionResult
+    {
+        public int Registered { get; set; }
+        public int Updated { get; set; }
+        public int Deleted { get; set; }
+    }
+
 }

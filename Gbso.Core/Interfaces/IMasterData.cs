@@ -1,7 +1,7 @@
 ﻿using Gbso.Core.Model;
-using Gbso.Core.Utils;
+using Gbso.Core.Data;
 
-namespace Gbso.Core.Interfaces
+namespace Gbso.Core.Data
 {
     public interface IMasterData<TModel, TKey, TCollection> where TModel : MasterModel<TKey> where TCollection : CollectionMaster<TModel, TKey>
     {

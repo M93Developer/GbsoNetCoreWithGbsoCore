@@ -25,7 +25,13 @@ namespace Gbso.App.Api.Controllers
         {
             using (var data = new NaturalPersonData(MainConnectionString))
             {
-                var rt = data.Get();
+                //var rt = data.Get();
+                var rt = data.Get(
+                        //p => new { p.IdType, p.Identification, p.FirstName, p.SecondName, p.Contact.Tel, p.Contact.Address},
+                        p => new { p.IdType, p.Identification, p.FirstName, p.SecondName, p.Contact.Tel, p.Contact.Address },
+                        p => p.BloodType == BloodType.AB && p.Rh == RhType.Positive && (p.IdType == IdTypeNaturalPerson.CC || p.IdType == IdTypeNaturalPerson.TI)
+                    );
+
                 return rt;
             }
         }

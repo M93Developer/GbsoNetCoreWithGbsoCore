@@ -41,6 +41,10 @@ namespace Gbso.Core.Attributes
     public class ModelToDataBase : Attribute
     {
         /// <summary>
+        /// 
+        /// </summary>
+        public string Schema { get; set; }
+        /// <summary>
         /// Table name in database
         /// </summary>
         public string TableName { get; set; }
@@ -55,8 +59,9 @@ namespace Gbso.Core.Attributes
         /// </summary>
         /// <param name="tableName">Indica el nombre de la tabla en base de datos asociada a la clase</param>
         /// <param name="storedProcedure">Indica el nombre del procedimiento almacenado asociado a la clase</param>
-        public ModelToDataBase(string tableName, string storedProcedure)
+        public ModelToDataBase(string schema, string tableName, string storedProcedure)
         {
+            this.Schema = schema;
             this.TableName = tableName;
             this.StoredProcedure = storedProcedure;
         }

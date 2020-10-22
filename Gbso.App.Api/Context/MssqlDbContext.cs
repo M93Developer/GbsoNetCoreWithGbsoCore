@@ -1,5 +1,6 @@
 ﻿using Gbso.App.Model.General;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Gbso.App.Api.Context
 {
